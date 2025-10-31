@@ -1,7 +1,6 @@
 {
   "name": "task_1",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "build": "webpack"
@@ -15,5 +14,6 @@
   },
   "devDependencies": {
     "webpack": "^5.88.0"
-  }
+  },
+  "description": ""
 }
