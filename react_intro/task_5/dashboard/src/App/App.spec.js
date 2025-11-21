@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-describe('App', () => {
+describe('App Component', () => {
   test('renders h1 element with text "School dashboard"', () => {
     render(<App />);
-    const h1Element = screen.getByRole('heading', {
-      level: 1,
-      name: /school dashboard/i,
+    const h1Element = screen.getByRole('heading', { 
+      level: 1, 
+      name: /school dashboard/i 
     });
     expect(h1Element).toBeInTheDocument();
   });
@@ -21,7 +21,7 @@ describe('App', () => {
     render(<App />);
     const currentYear = new Date().getFullYear();
     const copyrightText = screen.getByText(
-      new RegExp(`copyright ${currentYear} - holberton school`, 'i')
+      new RegExp(`copyright ${currentYear} holberton school main dashboard`, 'i')
     );
     expect(copyrightText).toBeInTheDocument();
   });
@@ -52,4 +52,3 @@ describe('App', () => {
     expect(button).toBeInTheDocument();
   });
 });
-
