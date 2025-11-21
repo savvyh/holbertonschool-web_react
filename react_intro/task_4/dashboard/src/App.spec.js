@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-describe('App', () => {
+describe('App Component', () => {
   test('renders h1 element with text "School dashboard"', () => {
     render(<App />);
     const h1Element = screen.getByRole('heading', { 

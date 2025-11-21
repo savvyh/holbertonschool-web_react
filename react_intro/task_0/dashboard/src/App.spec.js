@@ -1,20 +1,34 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-describe('App', () => {
+describe('App Component', () => {
   test('renders h1 element with text "School dashboard"', () => {
     render(<App />);
-    expect(screen.getByRole('heading', { level: 1, name: /School dashboard/i })).toBeInTheDocument();
-  })
+    const h1Element = screen.getByRole('heading', { 
+      level: 1, 
+      name: /school dashboard/i 
+    });
+    expect(h1Element).toBeInTheDocument();
+  });
 
-  test('renders correct text content in App-body and App-footer paragraphs', () => {
+  test('renders paragraph with login text in App-body', () => {
     render(<App />);
-    expect(screen.getByRole('paragraph', { name: /Login to access the full dashboard/i })).toBeInTheDocument();
-    expect(screen.getByRole('paragraph', { name: /Copyright \d{4} - holberton School/i })).toBeInTheDocument();
-  })
+    const loginText = screen.getByText(/login to access the full dashboard/i);
+    expect(loginText).toBeInTheDocument();
+  });
 
-  test('renders img element', () => {
+  test('renders paragraph with copyright text in App-footer', () => {
     render(<App />);
-    expect(screen.getByRole('img', { name: /holberton logo/i })).toBeInTheDocument();
-  })
-})
+    const currentYear = new Date().getFullYear();
+    const copyrightText = screen.getByText(
+      new RegExp(`copyright ${currentYear} - holberton school`, 'i')
+    );
+    expect(copyrightText).toBeInTheDocument();
+  });
+
+  test('renders img element with alt text "holberton logo"', () => {
+    render(<App />);
+    const imgElement = screen.getByAltText(/holberton logo/i);
+    expect(imgElement).toBeInTheDocument();
+  });
+});

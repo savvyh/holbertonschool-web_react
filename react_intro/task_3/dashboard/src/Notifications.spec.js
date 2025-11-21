@@ -1,34 +1,39 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import Notifications from './Notifications';
 
-describe('Notifications', () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  test('renders notifications title', () => {
+describe('Notifications Component', () => {
+  test('renders the notifications title', () => {
     render(<Notifications />);
-    expect(
-      screen.getByText(/here is the list of notifications/i)
-    ).toBeInTheDocument();
+    const titleElement = screen.getByText(/here is the list of notifications/i);
+    expect(titleElement).toBeInTheDocument();
   });
 
   test('renders the close button', () => {
     render(<Notifications />);
-    expect(screen.getByRole('button', { name: /close/i })).toBeInTheDocument();
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    expect(closeButton).toBeInTheDocument();
   });
 
-  test('renders three notification list items', () => {
-    render(<Notifications />);
-    const items = screen.getAllByRole('listitem');
-    expect(items).toHaveLength(3);
+  test('renders 3 list items', () => {
+    const { container } = render(<Notifications />);
+    const listItems = container.querySelectorAll('li');
+    expect(listItems).toHaveLength(3);
   });
 
-  test('logs message when close button is clicked', () => {
-    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+  test('clicking close button logs message to console', () => {
+    // Mock console.log
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+    
     render(<Notifications />);
-    fireEvent.click(screen.getByRole('button', { name: /close/i }));
-    expect(logSpy).toHaveBeenCalledWith('Close button has been clicked');
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    
+    // Simulate click event
+    fireEvent.click(closeButton);
+    
+    // Check if console.log was called with the correct message
+    expect(consoleSpy).toHaveBeenCalledWith('Close button has been clicked');
+    
+    // Restore console.log
+    consoleSpy.mockRestore();
   });
 });
-
