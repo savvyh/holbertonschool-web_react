@@ -4,9 +4,9 @@ import App from './App';
 describe('App', () => {
   test('renders h1 element with text "School dashboard"', () => {
     render(<App />);
-    const h1Element = screen.getByRole('heading', { 
-      level: 1, 
-      name: /school dashboard/i 
+    const h1Element = screen.getByRole('heading', {
+      level: 1,
+      name: /school dashboard/i,
     });
     expect(h1Element).toBeInTheDocument();
   });
@@ -52,3 +52,4 @@ describe('App', () => {
     expect(button).toBeInTheDocument();
   });
 });
+

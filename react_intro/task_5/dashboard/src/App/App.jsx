@@ -1,7 +1,7 @@
 import './App.css';
-import logo from './assets/holberton-logo.jpg';
-import { getCurrentYear, getFooterCopy } from './utils';
-import Notifications from './Notifications';
+import logo from '../assets/holberton-logo.jpg';
+import { getCurrentYear, getFooterCopy } from '../utils/utils';
+import Notifications from '../Notifications/Notifications';
 
 function App() {
   return (
@@ -24,10 +24,13 @@ function App() {
         </form>
       </div>
       <div className="App-footer">
-        <p>Copyright {getCurrentYear()} - {getFooterCopy(true)}</p>
+        <p>
+          Copyright {getCurrentYear()} - {getFooterCopy(true)}
+        </p>
       </div>
     </>
   );
 }
 
 export default App;
+
