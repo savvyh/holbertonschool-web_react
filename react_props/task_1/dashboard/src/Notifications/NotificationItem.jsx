@@ -27,16 +27,16 @@ function NotificationItem({ type = 'default', html = null, value = '' }) {
 
 NotificationItem.propTypes = {
   type: PropTypes.string,
-  value: PropTypes.string,
   html: PropTypes.shape({
     __html: PropTypes.string
-  }) 
+  }),
+  value: PropTypes.string
 };
 
 NotificationItem.defaultProps = {
   type: 'default',
-  value: '',
-  html: null
+  html: null,
+  value: ''
 };
 
 export default NotificationItem;
