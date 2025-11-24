@@ -18,7 +18,7 @@ describe('Footer Component', () => {
     const footerText = getFooterCopy(true);
     
     const paragraphElement = screen.getByText(
-      `Copyright ${currentYear} - ${footerText}`
+      `Copyright ${currentYear} ${footerText}`
     );
     
     expect(paragraphElement).toBeInTheDocument();
