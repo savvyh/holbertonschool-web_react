@@ -10,4 +10,16 @@ describe('Footer Component', () => {
     );
     expect(copyrightText).toBeInTheDocument();
   });
+
+  test('p element renders the expected string', () => {
+  render(<Footer />);
+  const currentYear = getCurrentYear();
+  const footerText = getFooterCopy(true);
+  
+  const paragraphElement = screen.getByText(
+    `Copyright ${currentYear} - ${footerText}`
+  );
+  
+  expect(paragraphElement).toBeInTheDocument();
+});
 });
