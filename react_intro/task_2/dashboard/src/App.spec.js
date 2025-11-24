@@ -40,8 +40,8 @@ describe('App Component', () => {
 
   test('renders 2 label elements with text Email and Password', () => {
     render(<App />);
-    const emailLabel = screen.getByText(/email/i);
-    const passwordLabel = screen.getByText(/password/i);
+    const emailLabel = screen.getByText(/email:/i);
+    const passwordLabel = screen.getByText(/password:/i);
     expect(emailLabel).toBeInTheDocument();
     expect(passwordLabel).toBeInTheDocument();
   });
