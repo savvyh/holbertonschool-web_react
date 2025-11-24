@@ -10,8 +10,8 @@ describe('Utils functions', () => {
     expect(getFooterCopy(true)).toBe('Holberton School');
   });
 
-  test('getFooterCopy returns "Holberton School main dashboard" when argument is false', () => {
-    expect(getFooterCopy(false)).toBe('Holberton School main dashboard');
+  test('getFooterCopy returns "Holberton School" when argument is false', () => {
+    expect(getFooterCopy(false)).toBe('Holberton School');
   });
 
   test('getLatestNotification returns the correct string', () => {
