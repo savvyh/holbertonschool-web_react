@@ -20,18 +20,18 @@ describe('Login Component', () => {
   });
 
   test('inputs get focused when their related labels are clicked', async () => {
-    const user = userEvent.setup();
-    render(<Login />);
-    
-    const emailLabel = screen.getByText(/email:/i);
-    const passwordLabel = screen.getByText(/password:/i);
-    const emailInput = screen.getByLabelText(/email:/i);
-    const passwordInput = screen.getByLabelText(/password:/i);
-    
-    await user.click(emailLabel);
-    expect(emailInput).toHaveFocus();
-    
-    await user.click(passwordLabel);
-    expect(passwordInput).toHaveFocus();
-  });
+  const user = userEvent.setup();
+  render(<Login />);
+  
+  const emailLabel = screen.getByText(/email:/i);
+  const passwordLabel = screen.getByText(/password:/i);
+  const emailInput = screen.getByLabelText(/email:/i);
+  const passwordInput = screen.getByLabelText(/password:/i);
+  
+  await user.click(emailLabel);
+  expect(emailInput).toHaveFocus();
+  
+  await user.click(passwordLabel);
+  expect(passwordInput).toHaveFocus();
+});
 });
