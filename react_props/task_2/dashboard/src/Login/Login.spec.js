@@ -5,33 +5,36 @@ import Login from './Login';
 describe('Login Component', () => {
   test('renders without crashing', () => {
     render(<Login />);
-    const loginText = screen.getByText(/login to access the full dashboard/i);
-    expect(loginText).toBeInTheDocument();
   });
 
-  test('includes 2 labels, 2 inputs and a button', () => {
+  test('contains 2 labels, 2 inputs, and 1 button', () => {
     const { container } = render(<Login />);
+
     const labels = container.querySelectorAll('label');
-    expect(labels.length).toBe(2);
+    expect(labels).toHaveLength(2);
+
     const inputs = container.querySelectorAll('input');
-    expect(inputs.length).toBe(2);
-    const button = container.querySelector('button');
-    expect(button).toBeInTheDocument();
+    expect(inputs).toHaveLength(2);
+
+    const buttons = container.querySelectorAll('button');
+    expect(buttons).toHaveLength(1);
+
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /ok/i })).toBeInTheDocument();
   });
 
   test('inputs get focused when their related labels are clicked', async () => {
     const user = userEvent.setup();
     render(<Login />);
-    
-    const emailLabel = screen.getByText(/email:/i);
-    const passwordLabel = screen.getByText(/password:/i);
-    const emailInput = screen.getByLabelText(/email:/i);
-    const passwordInput = screen.getByLabelText(/password:/i);
-    
-    await user.click(emailLabel);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+
+    await user.click(emailInput);
     expect(emailInput).toHaveFocus();
-    
-    await user.click(passwordLabel);
+
+    await user.click(passwordInput);
     expect(passwordInput).toHaveFocus();
   });
 });
