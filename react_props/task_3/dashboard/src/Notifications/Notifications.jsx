@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
 import './Notifications.css';
 import closeIcon from '../assets/close-button.png';
-import { getLatestNotification } from '../utils/utils';
+import NotificationItem from './NotificationItem';
 
-function Notifications() {
+function Notifications({ notifications = [] }) {
   const handleClose = () => {
     console.log('Close button has been clicked');
   };
@@ -25,15 +26,34 @@ function Notifications() {
       </button>
       <p>Here is the list of notifications</p>
       <ul>
-        <li data-priority="default">New course available</li>
-        <li data-priority="urgent">New resume available</li>
-        <li
-          data-priority="urgent"
-          dangerouslySetInnerHTML={{ __html: getLatestNotification() }}
-        ></li>
+        {notifications.map((notification) => (
+          <NotificationItem
+            key={notification.id}
+            type={notification.type}
+            value={notification.value}
+            html={notification.html}
+          />
+        ))}
       </ul>
     </div>
   );
 }
+
+Notifications.propTypes = {
+  notifications: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      type: PropTypes.string,
+      value: PropTypes.string,
+      html: PropTypes.shape({
+        __html: PropTypes.string
+      })
+    })
+  )
+};
+
+Notifications.defaultProps = {
+  notifications: []
+};
 
 export default Notifications;
