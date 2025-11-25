@@ -9,7 +9,7 @@ function App() {
   const notificationsList = [
     {
       id: 1,
-      type: 'default',
+      type: 'urgent',
       value: 'Notification available now'
     },
     {
