@@ -62,7 +62,7 @@ describe('App Component', () => {
     const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
     render(<App logOut={logOutMock} />);
 
-    fireEvent.keyDown(window, { key: 'h', ctrlKey: true });
+    fireEvent.keyDown(document, { key: 'h', ctrlKey: true });
 
     expect(logOutMock).toHaveBeenCalledTimes(1);
     alertMock.mockRestore();
@@ -73,7 +73,7 @@ describe('App Component', () => {
     const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
     render(<App logOut={logOutMock} />);
 
-    fireEvent.keyDown(window, { key: 'h', ctrlKey: true });
+    fireEvent.keyDown(document, { key: 'h', ctrlKey: true });
 
     expect(alertMock).toHaveBeenCalledWith('Logging you out');
     alertMock.mockRestore();
