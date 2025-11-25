@@ -10,7 +10,6 @@ function NotificationItem({ type = 'default', html = null, value = '' }) {
     return (
       <li
         data-notification-type={type}
-        data-priority={type}
         style={styles}
         dangerouslySetInnerHTML={html}
       />
@@ -20,7 +19,6 @@ function NotificationItem({ type = 'default', html = null, value = '' }) {
   return (
     <li
       data-notification-type={type}
-      data-priority={type}
       style={styles}
     >
       {value}
