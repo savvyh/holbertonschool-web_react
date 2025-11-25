@@ -4,38 +4,49 @@ import './Notifications.css';
 import closeIcon from '../assets/close-button.png';
 import NotificationItem from './NotificationItem';
 
-function Notifications({ notifications = [] }) {
+function Notifications({ notifications = [], displayDrawer = false }) {
   const handleClose = () => {
     console.log('Close button has been clicked');
   };
 
   return (
-    <div className="notification-items">
-      <button
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          background: 'transparent',
-          border: 'none',
-          cursor: 'pointer'
-        }}
-        aria-label="Close"
-        onClick={handleClose}
-      >
-        <img src={closeIcon} alt="close icon" style={{ width: '15px', height: '15px' }} />
-      </button>
-      <p>Here is the list of notifications</p>
-      <ul>
-        {notifications.map((notification) => (
-          <NotificationItem
-            key={notification.id}
-            type={notification.type}
-            value={notification.value}
-            html={notification.html}
-          />
-        ))}
-      </ul>
+    <div>
+      <div className="notification-title">Your notifications</div>
+      {displayDrawer && (
+        <div className="notification-items">
+          <button
+            style={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+            aria-label="Close"
+            onClick={handleClose}
+          >
+            <img src={closeIcon} alt="close icon" style={{ width: '15px', height: '15px' }} />
+          </button>
+          {notifications.length === 0 ? (
+            <p>No new notification for now</p>
+          ) : (
+            <>
+              <p>Here is the list of notifications</p>
+              <ul>
+                {notifications.map((notification) => (
+                  <NotificationItem
+                    key={notification.id}
+                    type={notification.type}
+                    value={notification.value}
+                    html={notification.html}
+                  />
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -50,11 +61,13 @@ Notifications.propTypes = {
         __html: PropTypes.string
       })
     })
-  )
+  ),
+  displayDrawer: PropTypes.bool
 };
 
 Notifications.defaultProps = {
-  notifications: []
+  notifications: [],
+  displayDrawer: false
 };
 
 export default Notifications;

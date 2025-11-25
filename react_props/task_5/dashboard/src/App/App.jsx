@@ -11,7 +11,7 @@ function App({ isLoggedIn = false }) {
   const notificationsList = [
     {
       id: 1,
-      type: 'urgent',
+      type: 'default',
       value: 'Notification available now'
     },
     {
