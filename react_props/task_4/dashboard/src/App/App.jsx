@@ -7,7 +7,7 @@ import Login from '../Login/Login';
 import Footer from '../Footer/Footer';
 import PropTypes from 'prop-types';
 
-function App({ isLoggedIn = true }) {
+function App({ isLoggedIn = false }) {
   const notificationsList = [
     {
       id: 1,
@@ -27,7 +27,21 @@ function App({ isLoggedIn = true }) {
   ];
 
   const coursesList = [
-    
+    { 
+      id: 1,
+      name: 'ES6',
+      credit: 60
+    },
+    { 
+      id: 2,
+      name: 'Webpack',
+      credit: 20
+    },
+    { 
+      id: 3,
+      name: 'React',
+      credit: 40
+    }
   ];
 
   return (
@@ -53,7 +67,7 @@ App.propTypes = {
 };
 
 App.defaultProps = {
-  isLoggedIn: true
+  isLoggedIn: false
 };
 
 export default App;
