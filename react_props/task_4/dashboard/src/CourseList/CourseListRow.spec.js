@@ -3,7 +3,13 @@ import CourseListRow from './CourseListRow';
 
 describe('CourseListRow Component', () => {
   test('renders one cell with colspan=2 when isHeader is true and textSecondCell is null', () => {
-    render(<CourseListRow isHeader={true} textFirstCell="Header" />);
+    render(
+      <table>
+        <thead>
+          <CourseListRow isHeader={true} textFirstCell="Header" />
+        </thead>
+      </table>
+    );
     const thElement = screen.getByRole('columnheader');
     expect(thElement).toBeInTheDocument();
     expect(thElement).toHaveAttribute('colspan', '2');
@@ -11,7 +17,13 @@ describe('CourseListRow Component', () => {
   });
 
   test('renders two cells when isHeader is true and textSecondCell is present', () => {
-    render(<CourseListRow isHeader={true} textFirstCell="Header 1" textSecondCell="Header 2" />);
+    render(
+      <table>
+        <thead>
+          <CourseListRow isHeader={true} textFirstCell="Header 1" textSecondCell="Header 2" />
+        </thead>
+      </table>
+    );
     const thElements = screen.getAllByRole('columnheader');
     expect(thElements).toHaveLength(2);
     expect(thElements[0]).toHaveTextContent('Header 1');
