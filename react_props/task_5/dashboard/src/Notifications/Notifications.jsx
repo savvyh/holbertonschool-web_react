@@ -10,7 +10,7 @@ function Notifications({ notifications = [], displayDrawer = false }) {
   };
 
   return (
-    <div>
+    <div className="notifications-container">
       <div className="notification-title">Your notifications</div>
       {displayDrawer && (
         <div className="notification-items">
@@ -29,7 +29,7 @@ function Notifications({ notifications = [], displayDrawer = false }) {
             <img src={closeIcon} alt="close icon" style={{ width: '15px', height: '15px' }} />
           </button>
           {notifications.length === 0 ? (
-            <p>No new notification for now</p>
+            <p className="no-notification-message">No new notification for now</p>
           ) : (
             <>
               <p>Here is the list of notifications</p>
