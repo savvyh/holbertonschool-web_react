@@ -12,9 +12,9 @@ describe('App Component', () => {
   });
 
   test('renders Notifications component', () => {
-    const { container } = render(<App />);
-    const notificationsDiv = container.querySelector('.root-notifications');
-    expect(notificationsDiv).toBeInTheDocument();
+    render(<App />);
+    const notificationsText = screen.getByText(/your notifications/i);
+    expect(notificationsText).toBeInTheDocument();
   });
 
   test('renders Header component', () => {
