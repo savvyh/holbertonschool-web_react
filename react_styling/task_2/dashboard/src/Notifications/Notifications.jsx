@@ -38,7 +38,9 @@ class Notifications extends Component {
               <img src={closeIcon} alt="close icon" className="w-[15px] h-[15px]" />
             </button>
             {notifications.length === 0 ? (
-              <p className="no-notification-message text-urgent-notification-item">No new notification for now</p>
+              <ul>
+                <li className="no-notification-message text-urgent-notification-item cursor-default">No new notification for now</li>
+              </ul>
             ) : (
               <>
                 <p>Here is the list of notifications</p>
@@ -79,7 +81,7 @@ Notifications.propTypes = {
 
 Notifications.defaultProps = {
   notifications: [],
-  displayDrawer: false
+  displayDrawer: true
 };
 
 export default Notifications;
