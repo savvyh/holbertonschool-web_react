@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import NotificationItem from './NotificationItem';
 
 describe('NotificationItem Component', () => {
@@ -43,5 +43,17 @@ describe('NotificationItem Component', () => {
     
     const liElement = container.querySelector('li');
     expect(liElement.innerHTML).toBe('<strong>Urgent requirement</strong> - complete by EOD');
+  });
+
+  test('calls markAsRead when notification item is clicked', () => {
+    const markAsReadMock = jest.fn();
+    const { container } = render(
+      <NotificationItem id={1} type="default" value="Notification" markAsRead={markAsReadMock} />
+    );
+
+    const liElement = container.querySelector('li');
+    fireEvent.click(liElement);
+
+    expect(markAsReadMock).toHaveBeenCalledWith(1);
   });
 });

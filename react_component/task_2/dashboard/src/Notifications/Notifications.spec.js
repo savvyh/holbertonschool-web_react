@@ -63,4 +63,16 @@ describe('Notifications Component', () => {
     expect(screen.getByText(/your notifications/i)).toBeInTheDocument();
     expect(screen.getByText(/no new notification for now/i)).toBeInTheDocument();
   });
+
+  test('logs markAsRead message when clicking on a notification item', () => {
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+    render(<Notifications notifications={sampleNotifications} displayDrawer={true} />);
+
+    const notifications = screen.getAllByRole('listitem');
+    fireEvent.click(notifications[1]);
+
+    expect(consoleSpy).toHaveBeenCalledWith('Notification 2 has been marked as read');
+
+    consoleSpy.mockRestore();
+  });
 });
