@@ -5,13 +5,13 @@ function CourseListRow({ isHeader = false, textFirstCell, textSecondCell = null 
   if (isHeader) {
     if (textSecondCell === null) {
       return (
-        <tr className="bg-[var(--color-table-header)] opacity-[0.66]">
+        <tr className="bg-table-header opacity-[0.66]">
           <th className="border border-gray-400 pl-2" colSpan="2">{textFirstCell}</th>
         </tr>
       );
     }
     return (
-      <tr className="bg-[var(--color-table-header)] opacity-[0.66]">
+      <tr className="bg-table-header opacity-[0.66]">
         <th className="border border-gray-400 pl-2">{textFirstCell}</th>
         <th className="border border-gray-400 pl-2">{textSecondCell}</th>
       </tr>
@@ -20,14 +20,14 @@ function CourseListRow({ isHeader = false, textFirstCell, textSecondCell = null 
 
   if (textSecondCell === null) {
     return (
-      <tr className="bg-[var(--color-table-header)] opacity-[0.66]">
+      <tr className="bg-table-header opacity-[0.66]">
         <td colSpan="2" className="no-course-message border border-gray-400 pl-2">{textFirstCell}</td>
       </tr>
     );
   }
 
   return (
-    <tr className="bg-[var(--color-table-rows)] opacity-[0.45]">
+    <tr className="bg-table-rows opacity-[0.45]">
       <td className="border border-gray-400 pl-2">{textFirstCell}</td>
       <td className="border border-gray-400 pl-2">{textSecondCell}</td>
     </tr>
