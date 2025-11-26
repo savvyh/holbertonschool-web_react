@@ -8,6 +8,10 @@ import Footer from '../Footer/Footer';
 import PropTypes from 'prop-types';
 import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
+import WithLogging from '../HOC/WithLogging';
+
+const CourseListWithLogging = WithLogging(CourseList);
+const LoginWithLogging = WithLogging(Login);
 
 class App extends Component {
   constructor(props) {
@@ -56,11 +60,11 @@ class App extends Component {
         <div className="App-body">
           {isLoggedIn ? (
             <BodySectionWithMarginBottom title="Course list">
-              <CourseList courses={coursesList} />
+              <CourseListWithLogging courses={coursesList} />
             </BodySectionWithMarginBottom>
           ) : (
             <BodySectionWithMarginBottom title="Log in to continue">
-              <Login />
+              <LoginWithLogging />
             </BodySectionWithMarginBottom>
           )}
           <BodySection title="News from the School">
