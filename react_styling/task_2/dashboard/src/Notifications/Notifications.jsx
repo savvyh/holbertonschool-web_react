@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './Notifications.css';
 import closeIcon from '../assets/close-button.png';
 import NotificationItem from './NotificationItem';
 
@@ -27,26 +26,19 @@ class Notifications extends Component {
     const { notifications, displayDrawer } = this.props;
 
     return (
-      <div className="notifications-container">
-        <div className="notification-title">Your notifications</div>
+      <div className="notifications-container flex flex-col items-end">
+        <div className="notification-title text-right">Your notifications</div>
         {displayDrawer && (
-          <div className="notification-items">
+          <div className="notification-items w-1/4 border-2 border-dashed border-main-color p-1.5 relative">
             <button
-              style={{
-                position: 'absolute',
-                top: '10px',
-                right: '10px',
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer'
-              }}
+              className="absolute top-2.5 right-2.5 bg-transparent border-none cursor-pointer"
               aria-label="Close"
               onClick={this.handleClose}
             >
-              <img src={closeIcon} alt="close icon" style={{ width: '15px', height: '15px' }} />
+              <img src={closeIcon} alt="close icon" className="w-[15px] h-[15px]" />
             </button>
             {notifications.length === 0 ? (
-              <p className="no-notification-message">No new notification for now</p>
+              <p className="no-notification-message text-urgent-notification-item">No new notification for now</p>
             ) : (
               <>
                 <p>Here is the list of notifications</p>
