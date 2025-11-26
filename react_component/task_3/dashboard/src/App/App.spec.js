@@ -78,4 +78,10 @@ describe('App Component', () => {
     expect(alertMock).toHaveBeenCalledWith('Logging you out');
     alertMock.mockRestore();
   });
+
+  test('displays news section with title and paragraph by default', () => {
+    render(<App />);
+    expect(screen.getByRole('heading', { level: 2, name: /news from the school/i })).toBeInTheDocument();
+    expect(screen.getByText(/holberton school news goes here/i)).toBeInTheDocument();
+  });
 });
