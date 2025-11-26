@@ -75,4 +75,27 @@ describe('Notifications Component', () => {
 
     consoleSpy.mockRestore();
   });
+
+  test('does not re-render when notifications length stays the same', () => {
+    const renderSpy = jest.spyOn(Notifications.prototype, 'render');
+    const { rerender } = render(<Notifications notifications={sampleNotifications} displayDrawer={true} />);
+
+    renderSpy.mockClear();
+    rerender(<Notifications notifications={[...sampleNotifications]} displayDrawer={true} />);
+
+    expect(renderSpy).not.toHaveBeenCalled();
+    renderSpy.mockRestore();
+  });
+
+  test('re-renders when notifications length increases', () => {
+    const renderSpy = jest.spyOn(Notifications.prototype, 'render');
+    const { rerender } = render(<Notifications notifications={sampleNotifications} displayDrawer={true} />);
+
+    renderSpy.mockClear();
+    const updatedNotifications = [...sampleNotifications, { id: 4, type: 'default', value: 'New notification' }];
+    rerender(<Notifications notifications={updatedNotifications} displayDrawer={true} />);
+
+    expect(renderSpy).toHaveBeenCalled();
+    renderSpy.mockRestore();
+  });
 });
