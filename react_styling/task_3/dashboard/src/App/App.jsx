@@ -1,5 +1,4 @@
 import React, { Fragment, Component } from 'react';
-import './App.css';
 import Notifications from '../Notifications/Notifications';
 import CourseList from '../CourseList/CourseList';
 import Header from '../Header/Header';
@@ -53,25 +52,27 @@ class App extends Component {
 
     return (
       <Fragment>
-        <div className="root-notifications">
-          <Notifications notifications={notificationsList} />
+        <div className="min-h-screen flex flex-col m-0">
+          <div className="absolute top-0 right-0 z-10">
+            <Notifications notifications={notificationsList} />
+          </div>
+          <Header />
+          <div className="flex-1">
+            {isLoggedIn ? (
+              <BodySectionWithMarginBottom title="Course list">
+                <CourseListWithLogging courses={coursesList} />
+              </BodySectionWithMarginBottom>
+            ) : (
+              <BodySectionWithMarginBottom title="Log in to continue">
+                <LoginWithLogging />
+              </BodySectionWithMarginBottom>
+            )}
+            <BodySection title="News from the School">
+              <p>Holberton School News goes here</p>
+            </BodySection>
+          </div>
+          <Footer />
         </div>
-        <Header />
-        <div className="App-body">
-          {isLoggedIn ? (
-            <BodySectionWithMarginBottom title="Course list">
-              <CourseListWithLogging courses={coursesList} />
-            </BodySectionWithMarginBottom>
-          ) : (
-            <BodySectionWithMarginBottom title="Log in to continue">
-              <LoginWithLogging />
-            </BodySectionWithMarginBottom>
-          )}
-          <BodySection title="News from the School">
-            <p>Holberton School News goes here</p>
-          </BodySection>
-        </div>
-        <Footer />
       </Fragment>
     );
   }
