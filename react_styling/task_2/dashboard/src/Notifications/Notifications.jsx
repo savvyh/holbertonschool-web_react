@@ -38,11 +38,9 @@ class Notifications extends Component {
               <img src={closeIcon} alt="close icon" className="w-[15px] h-[15px]" />
             </button>
             {notifications.length === 0 ? (
-              <ul className="list-none pl-0">
-                <li className="no-notification-message cursor-default">
-                  No new notification for now
-                </li>
-              </ul>
+              <p className="no-notification-message cursor-default">
+                No new notification for now
+              </p>
             ) : (
               <>
                 <p>Here is the list of notifications</p>
