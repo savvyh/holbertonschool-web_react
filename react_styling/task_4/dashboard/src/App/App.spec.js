@@ -82,6 +82,6 @@ describe('App Component', () => {
   test('displays news section with title and paragraph by default', () => {
     render(<App />);
     expect(screen.getByRole('heading', { level: 2, name: /news from the school/i })).toBeInTheDocument();
-    expect(screen.getByText(/holberton school news goes here/i)).toBeInTheDocument();
+    expect(screen.getByText(/ipsum Lorem ipsum dolor sit amet consectetur, adipisicing elit. Similique, asperiores architecto blanditiis fuga doloribus sit illum aliquid ea distinctio minus accusantium, impedit quo voluptatibus ut magni dicta. Recusandae, quia dicta?/i)).toBeInTheDocument();
   });
 });
