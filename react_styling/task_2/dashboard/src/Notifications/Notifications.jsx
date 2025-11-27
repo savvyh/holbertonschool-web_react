@@ -26,25 +26,21 @@ class Notifications extends Component {
     const { notifications, displayDrawer = true } = this.props;
 
     return (
-      <div className="notifications-container flex flex-col items-end gap-2">
-        <div className="notification-title text-right font-medium">Your notifications</div>
+      <div className="flex flex-col items-end gap-2 pr-4">
+        <p className="text-right font-medium">Your notifications</p>
         {displayDrawer && (
-          <div className="notification-items relative w-full sm:w-1/2 md:w-1/3 lg:w-1/4 border-2 border-dashed border-main-color p-[6px]">
-            <button
-              className="absolute top-2 right-2 bg-transparent border-0 cursor-pointer"
-              aria-label="Close"
-              onClick={this.handleClose}
-            >
-              <img src={closeIcon} alt="close icon" className="w-[15px] h-[15px]" />
-            </button>
-            {notifications.length === 0 ? (
-              <p className="no-notification-message cursor-default">
-                No new notification for now
-              </p>
-            ) : (
+          <div className="relative max-w-md border-2 border-dashed border-main-color px-6 py-4">
+            {notifications.length > 0 ? (
               <>
-                <p>Here is the list of notifications</p>
-                <ul className="list-disc list-inside">
+                <p className="mb-4 text-sm font-medium">Here is the list of notifications</p>
+                <button
+                  type="button"
+                  className="absolute right-4 top-3 bg-transparent border-0 cursor-pointer"
+                  onClick={this.handleClose}
+                >
+                  <img src={closeIcon} alt="close icon" className="w-[15px] h-[15px]" />
+                </button>
+                <ul>
                   {notifications.map((notification) => (
                     <NotificationItem
                       key={notification.id}
@@ -57,6 +53,8 @@ class Notifications extends Component {
                   ))}
                 </ul>
               </>
+            ) : (
+              <p className="text-sm">No new notification for now</p>
             )}
           </div>
         )}
@@ -81,7 +79,7 @@ Notifications.propTypes = {
 
 Notifications.defaultProps = {
   notifications: [],
-  displayDrawer: false
+  displayDrawer: true
 };
 
 export default Notifications;

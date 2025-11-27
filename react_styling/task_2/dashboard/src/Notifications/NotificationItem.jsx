@@ -13,33 +13,27 @@ class NotificationItem extends PureComponent {
       markAsRead(id);
     }
   }
-
   render() {
-    const { type, html, value, markAsRead } = this.props;
-    const textColor = type === 'urgent' 
-      ? 'text-urgent-notification-item' 
+    const { type, html, value } = this.props;
+    const textColor = type === 'urgent'
+      ? 'text-urgent-notification-item'
       : 'text-default-notification-item';
-    const cursor = markAsRead ? 'cursor-pointer' : 'cursor-default';
-    const className = `${textColor} ${cursor}`;
-
-    if (html) {
-      return (
-        <li
-          data-notification-type={type}
-          className={className}
-          onClick={this.handleClick}
-          dangerouslySetInnerHTML={html}
-        />
-      );
-    }
+    const bulletColor = type === 'urgent'
+      ? 'bg-urgent-notification-item'
+      : 'bg-default-notification-item';
 
     return (
       <li
         data-notification-type={type}
-        className={className}
+        className="flex cursor-pointer items-start gap-2 text-sm"
         onClick={this.handleClick}
       >
-        {value}
+        <span className={`mt-1 h-2 w-2 ${bulletColor}`} />
+        {value ? (
+          <span className={textColor}>{value}</span>
+        ) : (
+          <span className={textColor} dangerouslySetInnerHTML={html} />
+        )}
       </li>
     );
   }
