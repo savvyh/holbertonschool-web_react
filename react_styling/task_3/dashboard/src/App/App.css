@@ -1,13 +1,10 @@
-* {
+html, body {
+  height: 100%;
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 
-body {
-  font-family: Arial, sans-serif;
-}
-
-.root-notifications {
-  padding: 20px;
+#root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
