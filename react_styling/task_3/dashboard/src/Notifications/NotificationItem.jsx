@@ -19,7 +19,7 @@ class NotificationItem extends PureComponent {
     const textColor = type === 'urgent' 
       ? 'text-urgent-notification-item' 
       : 'text-default-notification-item';
-    const cursor = markAsRead ? 'pointer' : 'default';
+    const cursor = markAsRead ? 'cursor-pointer' : 'cursor-default';
     const className = `${textColor} ${cursor}`;
 
     if (html) {

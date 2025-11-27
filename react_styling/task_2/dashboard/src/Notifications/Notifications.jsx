@@ -29,7 +29,7 @@ class Notifications extends Component {
       <div className="notifications-container flex flex-col items-end gap-2">
         <div className="notification-title text-right font-medium">Your notifications</div>
         {displayDrawer && (
-          <div className="notification-items relative w-full sm:w-1/2 md:w-1/3 lg:w-1/4 border-2 border-dashed border-[color:var(--color-main-color)] p-[6px]">
+          <div className="notification-items relative w-full sm:w-1/2 md:w-1/3 lg:w-1/4 border-2 border-dashed border-main-color p-[6px]">
             <button
               className="absolute top-2 right-2 bg-transparent border-0 cursor-pointer"
               aria-label="Close"
