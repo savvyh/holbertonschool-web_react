@@ -23,7 +23,7 @@ class Notifications extends Component {
   }
 
   render() {
-    const { notifications, displayDrawer } = this.props;
+    const { notifications, displayDrawer = true } = this.props;
 
     return (
       <div className="notifications-container flex flex-col items-end gap-2">
