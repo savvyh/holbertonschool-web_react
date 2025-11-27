@@ -25,14 +25,17 @@ class NotificationItem extends PureComponent {
     return (
       <li
         data-notification-type={type}
-        className="flex cursor-pointer items-start gap-2 text-sm"
+        className="flex items-center cursor-pointer gap-2 text-sm"
         onClick={this.handleClick}
       >
-        <span className={`mt-1 h-2 w-2 ${bulletColor}`} />
-        {value ? (
-          <span className={textColor}>{value}</span>
-        ) : (
+        <span
+          className={`h-[6px] w-[6px] ${bulletColor}`}
+          aria-hidden="true"
+        />
+        {html ? (
           <span className={textColor} dangerouslySetInnerHTML={html} />
+        ) : (
+          <span className={textColor}>{value}</span>
         )}
       </li>
     );

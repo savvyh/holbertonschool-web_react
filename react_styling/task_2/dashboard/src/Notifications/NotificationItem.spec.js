@@ -17,8 +17,8 @@ describe('NotificationItem Component', () => {
       <NotificationItem type="urgent" html={htmlContent} />
     );
     
-    const liElement = container.querySelector('li');
-    expect(liElement.innerHTML).toBe('<strong>Urgent requirement</strong> - complete by EOD');
+    const contentSpan = container.querySelector('li span:last-child');
+    expect(contentSpan.innerHTML).toBe('<strong>Urgent requirement</strong> - complete by EOD');
   });
 
   test('calls markAsRead when notification item is clicked', () => {

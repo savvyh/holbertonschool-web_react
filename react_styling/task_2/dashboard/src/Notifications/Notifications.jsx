@@ -32,7 +32,7 @@ class Notifications extends Component {
           <div className="relative max-w-md border-2 border-dashed border-main-color px-6 py-4">
             {notifications.length > 0 ? (
               <>
-                <p className="mb-4 text-sm font-medium">Here is the list of notifications</p>
+                <p className="text-sm font-medium">Here is the list of notifications</p>
                 <button
                   type="button"
                   className="absolute right-4 top-3 bg-transparent border-0 cursor-pointer"
