@@ -12,8 +12,8 @@ class Notifications extends Component {
 
   shouldComponentUpdate(nextProps) {
     return (
-      nextProps.notifications.length !== this.props.notifications.length ||
-      nextProps.displayDrawer !== this.props.displayDrawer
+      this.props.notifications.length !== nextProps.notifications.length ||
+      this.props.displayDrawer !== nextProps.displayDrawer
     );
   }
 
@@ -26,15 +26,15 @@ class Notifications extends Component {
   }
 
   render() {
-    const { notifications, displayDrawer } = this.props;
+    const { displayDrawer = false, notifications = [] } = this.props;
     const shouldBounce = notifications.length > 0 && !displayDrawer;
 
     return (
-      <div className="flex flex-col items-end gap-2 pr-4">
+      <>
         <div className={`text-right font-medium ${shouldBounce ? 'animate-bounce' : ''}`}>
           Your notifications
         </div>
-        {displayDrawer && (
+        {displayDrawer ? (
           <div className="max-[912px]:fixed max-[912px]:top-0 max-[912px]:left-0 max-[912px]:w-full max-[912px]:h-full max-[912px]:bg-white max-[912px]:z-50 max-[912px]:border-none max-[912px]:p-0 relative max-w-md border-2 border-dashed border-main-color px-6 py-4">
             {notifications.length > 0 ? (
               <>
@@ -63,8 +63,8 @@ class Notifications extends Component {
               <p className="text-sm">No new notification for now</p>
             )}
           </div>
-        )}
-      </div>
+        ) : null}
+      </>
     );
   }
 }
@@ -85,7 +85,7 @@ Notifications.propTypes = {
 
 Notifications.defaultProps = {
   notifications: [],
-  displayDrawer: true
+  displayDrawer: false
 };
 
 export default Notifications;
