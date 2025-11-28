@@ -26,7 +26,7 @@ class Notifications extends Component {
   }
 
   render() {
-    const { notifications, displayDrawer = true } = this.props;
+    const { notifications, displayDrawer } = this.props;
     const shouldBounce = notifications.length > 0 && !displayDrawer;
 
     return (
