@@ -24,14 +24,11 @@ class Notifications extends Component {
 
   render() {
     const { notifications, displayDrawer = true } = this.props;
+    const shouldBounce = notifications.length > 0 && !displayDrawer;
 
     return (
       <div className="flex flex-col items-end gap-2 pr-4">
-        <div className={`text-right font-medium ${
-          notifications.length > 0 && displayDrawer === false
-            ? 'animate-bounce'
-            : ''
-        }`}>
+        <div className={`text-right font-medium ${shouldBounce ? 'animate-bounce' : ''}`}>
           Your notifications
         </div>
         {displayDrawer && (
