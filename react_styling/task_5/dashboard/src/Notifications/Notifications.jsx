@@ -27,7 +27,13 @@ class Notifications extends Component {
 
     return (
       <div className="flex flex-col items-end gap-2 pr-4">
-        <p className={`text-right font-medium ${notifications.length > 0 && !displayDrawer ? 'animate-bounce' : ''}`}>Your notifications</p>
+        <div className={`text-right font-medium ${
+          notifications.length > 0 && displayDrawer === false
+            ? 'animate-bounce'
+            : ''
+        }`}>
+          Your notifications
+        </div>
         {displayDrawer && (
           <div className="max-[912px]:fixed max-[912px]:top-0 max-[912px]:left-0 max-[912px]:w-full max-[912px]:h-full max-[912px]:bg-white max-[912px]:z-50 max-[912px]:border-none max-[912px]:p-0 relative max-w-md border-2 border-dashed border-main-color px-6 py-4">
             {notifications.length > 0 ? (
