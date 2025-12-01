@@ -17,6 +17,18 @@ class App extends Component {
     super(props);
     this.handleKeyDown = this.handleKeyDown.bind(this);
 
+    const notificationsList = [
+      { id: 1, type: 'default', value: 'New course available' },
+      { id: 2, type: 'urgent', value: 'New resume available' },
+      { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } }
+    ];
+
+    const coursesList = [
+      { id: 1, name: 'ES6', credit: 60 },
+      { id: 2, name: 'Webpack', credit: 20 },
+      { id: 3, name: 'React', credit: 40 }
+    ];
+
     this.state = {
       displayDrawer: false,
       user: {
@@ -24,13 +36,16 @@ class App extends Component {
         password: '',
         isLoggedIn: false
       },
-      logOut: () => {}
+      logOut: () => {},
+      notifications: notificationsList,
+      courses: coursesList
     };
 
     this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
     this.handleHideDrawer = this.handleHideDrawer.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.markNotificationAsRead = this.markNotificationAsRead.bind(this);
 
     this.state.logOut = this.logOut;
   }
@@ -63,6 +78,13 @@ class App extends Component {
     this.setState({ displayDrawer: false });
   }
 
+  markNotificationAsRead(id) {
+    console.log(`Notification ${id} has been marked as read`);
+    this.setState(prevState => ({
+      notifications: prevState.notifications.filter(notification => notification.id !== id)
+    }));
+  }
+
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
   }
@@ -80,19 +102,7 @@ class App extends Component {
   }
 
   render() {
-    const { displayDrawer, user, logOut } = this.state;
-
-    const notificationsList = [
-      { id: 1, type: 'default', value: 'New course available' },
-      { id: 2, type: 'urgent', value: 'New resume available' },
-      { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } }
-    ];
-
-    const coursesList = [
-      { id: 1, name: 'ES6', credit: 60 },
-      { id: 2, name: 'Webpack', credit: 20 },
-      { id: 3, name: 'React', credit: 40 }
-    ];
+    const { displayDrawer, user, logOut, notifications, courses } = this.state;
 
     const contextValue = {
       user,
@@ -105,17 +115,18 @@ class App extends Component {
           <div className="min-h-screen flex flex-col m-0">
             <div className="absolute top-0 right-0 z-10">
               <Notifications 
-                notifications={notificationsList} 
+                notifications={notifications} 
                 displayDrawer={displayDrawer} 
                 handleDisplayDrawer={this.handleDisplayDrawer} 
-                handleHideDrawer={this.handleHideDrawer} 
+                handleHideDrawer={this.handleHideDrawer}
+                markNotificationAsRead={this.markNotificationAsRead}
               />
             </div>
             <Header />
             <div className="flex-1 px-4 md:px-8">
               {user.isLoggedIn ? (
                 <BodySectionWithMarginBottom title="Course list">
-                  <CourseListWithLogging courses={coursesList} />
+                  <CourseListWithLogging courses={courses} />
                 </BodySectionWithMarginBottom>
               ) : (
                 <BodySectionWithMarginBottom title="Log in to continue">

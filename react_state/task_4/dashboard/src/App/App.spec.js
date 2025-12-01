@@ -208,4 +208,32 @@ describe('App Component', () => {
     expect(screen.getByText(/login to access the full dashboard/i)).toBeInTheDocument();
     expect(screen.queryByText(/welcome/i)).not.toBeInTheDocument();
   });
+
+  test('removes notification from list when clicking on it and logs correct message', async () => {
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+    const user = userEvent.setup();
+    render(<App />);
+
+    const notificationsTitle = screen.getByText(/your notifications/i);
+    await user.click(notificationsTitle);
+
+    await waitFor(() => {
+      expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
+    });
+
+    const notificationItems = screen.getAllByRole('listitem');
+    expect(notificationItems).toHaveLength(3);
+
+    const firstNotification = notificationItems[0];
+    await user.click(firstNotification);
+
+    expect(consoleSpy).toHaveBeenCalledWith('Notification 1 has been marked as read');
+
+    await waitFor(() => {
+      const remainingNotifications = screen.getAllByRole('listitem');
+      expect(remainingNotifications).toHaveLength(2);
+    });
+
+    consoleSpy.mockRestore();
+  });
 });

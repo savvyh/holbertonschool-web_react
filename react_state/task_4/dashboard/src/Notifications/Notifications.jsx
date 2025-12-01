@@ -3,25 +3,10 @@ import PropTypes from 'prop-types';
 import closeIcon from '../assets/close-button.png';
 import NotificationItem from './NotificationItem';
 
-class Notifications extends React.Component {
-  constructor(props) {
-    super(props);
-    this.markAsRead = this.markAsRead.bind(this);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return (
-      this.props.notifications.length !== nextProps.notifications.length ||
-      this.props.displayDrawer !== nextProps.displayDrawer
-    );
-  }
-
-  markAsRead(id) {
-    console.log(`Notification ${id + 1} has been marked as read`);
-  }
+class Notifications extends React.PureComponent {
 
   render() {
-    const { displayDrawer = false, notifications = [], handleDisplayDrawer, handleHideDrawer } = this.props;
+    const { displayDrawer = false, notifications = [], handleDisplayDrawer, handleHideDrawer, markNotificationAsRead } = this.props;
 
     const shouldBounce = notifications.length > 0 && !displayDrawer;
 
@@ -47,14 +32,14 @@ class Notifications extends React.Component {
                   <img src={closeIcon} alt="close icon" className="w-3 h-3" />
                 </button>
                 <ul className="list-[square] pl-5 max-[912px]:p-0 max-[912px]:list-none">
-                  {notifications.map((notification, index) => (
+                  {notifications.map((notification) => (
                     <NotificationItem
-                      id={index}
+                      id={notification.id}
                       key={notification.id}
                       type={notification.type}
                       value={notification.value}
                       html={notification.html}
-                      markAsRead={this.markAsRead}
+                      markAsRead={markNotificationAsRead}
                     />
                   ))}
                 </ul>
@@ -82,7 +67,8 @@ Notifications.propTypes = {
     })
   ),
   handleDisplayDrawer: PropTypes.func,
-  handleHideDrawer: PropTypes.func
+  handleHideDrawer: PropTypes.func,
+  markNotificationAsRead: PropTypes.func
 };
 
 Notifications.defaultProps = {
