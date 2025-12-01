@@ -25,6 +25,14 @@ class App extends Component {
     this.handleHideDrawer = this.handleHideDrawer.bind(this);
   }
 
+  handleDisplayDrawer() {
+    this.setState({ displayDrawer: true });
+  }
+
+  handleHideDrawer() {
+    this.setState({ displayDrawer: false });
+  }
+
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
   }
@@ -44,6 +52,7 @@ class App extends Component {
 
   render() {
     const { isLoggedIn } = this.props;
+    const { displayDrawer } = this.state;
 
     const notificationsList = [
       { id: 1, type: 'default', value: 'New course available' },
@@ -61,7 +70,12 @@ class App extends Component {
       <Fragment>
         <div className="min-h-screen flex flex-col m-0">
           <div className="absolute top-0 right-0 z-10">
-            <Notifications notifications={notificationsList} />
+            <Notifications 
+              notifications={notificationsList} 
+              displayDrawer={displayDrawer} 
+              handleDisplayDrawer={this.handleDisplayDrawer} 
+              handleHideDrawer={this.handleHideDrawer} 
+            />
           </div>
           <Header />
           <div className="flex-1 px-4 md:px-8">
