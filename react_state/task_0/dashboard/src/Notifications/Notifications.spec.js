@@ -98,4 +98,36 @@ describe('Notifications Component', () => {
     expect(renderSpy).toHaveBeenCalled();
     renderSpy.mockRestore();
   });
+
+  test('calls handleDisplayDrawer when clicking on the menu item', () => {
+    const handleDisplayDrawer = jest.fn();
+    render(
+      <Notifications 
+        notifications={sampleNotifications} 
+        displayDrawer={false}
+        handleDisplayDrawer={handleDisplayDrawer}
+      />
+    );
+
+    const menuItem = screen.getByText(/your notifications/i);
+    fireEvent.click(menuItem);
+
+    expect(handleDisplayDrawer).toHaveBeenCalled();
+  });
+
+  test('calls handleHideDrawer when clicking on the close button', () => {
+    const handleHideDrawer = jest.fn();
+    render(
+      <Notifications 
+        notifications={sampleNotifications} 
+        displayDrawer={true}
+        handleHideDrawer={handleHideDrawer}
+      />
+    );
+
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    fireEvent.click(closeButton);
+
+    expect(handleHideDrawer).toHaveBeenCalled();
+  });
 });
