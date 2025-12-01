@@ -92,11 +92,16 @@ describe('Notifications Component', () => {
 
   test('does not re-render when notifications length stays the same (PureComponent)', () => {
     const renderSpy = jest.spyOn(Notifications.prototype, 'render');
+    const markNotificationAsRead = jest.fn();
+    const handleDisplayDrawer = jest.fn();
+    const handleHideDrawer = jest.fn();
     const { rerender } = render(
       <Notifications 
         notifications={sampleNotifications} 
         displayDrawer={true}
-        markNotificationAsRead={() => {}}
+        markNotificationAsRead={markNotificationAsRead}
+        handleDisplayDrawer={handleDisplayDrawer}
+        handleHideDrawer={handleHideDrawer}
       />
     );
 
@@ -105,7 +110,9 @@ describe('Notifications Component', () => {
       <Notifications
         notifications={sampleNotifications}
         displayDrawer={true}
-        markNotificationAsRead={() => {}}
+        markNotificationAsRead={markNotificationAsRead}
+        handleDisplayDrawer={handleDisplayDrawer}
+        handleHideDrawer={handleHideDrawer}
       />
     );
 
