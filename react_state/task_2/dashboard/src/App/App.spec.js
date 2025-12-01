@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import App from './App';
 
 describe('App Component', () => {
@@ -41,37 +42,63 @@ describe('App Component', () => {
     expect(copyrightText).toBeInTheDocument();
   });
 
-  test('renders CourseList when isLoggedIn is true', () => {
-    render(<App isLoggedIn={true} />);
-    expect(screen.queryByText(/login to access the full dashboard/i)).not.toBeInTheDocument();
+  test('renders CourseList when user is logged in', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /ok/i });
+
+    await user.type(emailInput, 'test@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.queryByText(/login to access the full dashboard/i)).not.toBeInTheDocument();
+    });
 
     const table = screen.getByRole('table');
     expect(table).toBeInTheDocument();
   });
 
-  test('not render CourseList when isLoggedIn is false', () => {
-    render(<App isLoggedIn={false} />);
+  test('not render CourseList when user is not logged in', () => {
+    render(<App />);
     expect(screen.getByText(/login to access the full dashboard/i)).toBeInTheDocument();
 
     const table = screen.queryByRole('table');
     expect(table).not.toBeInTheDocument();
   });
 
-  test('calls logOut when control and h keys are pressed', () => {
-    const logOutMock = jest.fn();
+  test('calls logOut when control and h keys are pressed', async () => {
+    const user = userEvent.setup();
     const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
-    render(<App logOut={logOutMock} />);
+    render(<App />);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /ok/i });
+
+    await user.type(emailInput, 'test@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByRole('table')).toBeInTheDocument();
+    });
 
     fireEvent.keyDown(document, { key: 'h', ctrlKey: true });
 
-    expect(logOutMock).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(screen.getByText(/login to access the full dashboard/i)).toBeInTheDocument();
+    });
+
     alertMock.mockRestore();
   });
 
   test('calls alert with the appropriate message when control and h keys are pressed', () => {
-    const logOutMock = jest.fn();
     const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
-    render(<App logOut={logOutMock} />);
+    render(<App />);
 
     fireEvent.keyDown(document, { key: 'h', ctrlKey: true });
 

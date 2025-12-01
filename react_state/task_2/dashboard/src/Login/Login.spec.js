@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Login from './Login';
 
@@ -64,5 +64,22 @@ describe('Login Component', () => {
     await user.clear(passwordInput);
     await user.type(passwordInput, 'short');
     expect(submitButton).toBeDisabled();
+  });
+
+  test('calls logIn with email and password when form is submitted', async () => {
+    const logIn = jest.fn();
+    const user = userEvent.setup();
+    render(<Login logIn={logIn} />);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /ok/i });
+
+    await user.type(emailInput, 'test@example.com');
+    await user.type(passwordInput, 'password123');
+
+    fireEvent.click(submitButton);
+
+    expect(logIn).toHaveBeenCalledWith('test@example.com', 'password123');
   });
 });

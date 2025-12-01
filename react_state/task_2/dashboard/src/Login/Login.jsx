@@ -1,12 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
+    const { email = '', password = '' } = props;
     this.state = {
-      email: '',
-      password: '',
-      isLoggedIn: false,
+      email,
+      password,
       enableSubmit: false
     };
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
@@ -39,7 +40,9 @@ class Login extends React.Component {
 
   handleLoginSubmit(event) {
     event.preventDefault();
-    this.setState({ isLoggedIn: true });
+    const { logIn } = this.props;
+    const { email, password } = this.state;
+    logIn(email, password);
   }
 
   render() {
@@ -78,5 +81,17 @@ class Login extends React.Component {
     );
   }
 }
+
+Login.propTypes = {
+  logIn: PropTypes.func,
+  email: PropTypes.string,
+  password: PropTypes.string
+};
+
+Login.defaultProps = {
+  logIn: () => {},
+  email: '',
+  password: ''
+};
 
 export default Login;
