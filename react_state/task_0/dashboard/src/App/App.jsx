@@ -16,8 +16,13 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.handleKeyDown = this.handleKeyDown.bind(this);
-    
-    const [displayDrawer, setDisplayDrawer] = useState(false); 
+
+    this.state = {
+      displayDrawer: false
+    };
+
+    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
+    this.handleHideDrawer = this.handleHideDrawer.bind(this);
   }
 
   componentDidMount() {
