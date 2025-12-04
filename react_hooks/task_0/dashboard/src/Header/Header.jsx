@@ -1,21 +1,14 @@
 import logo from '../assets/holberton-logo.jpg';
-import React from 'react';
+import React, { useContext } from 'react';
 import AppContext from '../Context/context';
 
-class Header extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleLogoutClick = this.handleLogoutClick.bind(this);
-  }
+function Header() {
+  const { user, logOut } = useContext(AppContext);
 
-  handleLogoutClick(event) {
+  const handleLogoutClick = (event) => {
     event.preventDefault();
-    const { logOut } = this.context;
     logOut();
   }
-
-  render() {
-    const { user } = this.context;
 
     return (
       <>
@@ -25,14 +18,11 @@ class Header extends React.Component {
         </div>
         {user.isLoggedIn && (
           <div id="logoutSection">
-            Welcome {user.email} (<a href="#" onClick={this.handleLogoutClick}>logout</a>)
+            Welcome {user.email} (<a href="#" onClick={handleLogoutClick}>logout</a>)
           </div>
         )}
       </>
     );
-  }
 }
-
-Header.contextType = AppContext;
 
 export default Header;
