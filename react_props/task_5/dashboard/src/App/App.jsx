@@ -12,12 +12,12 @@ function App({ isLoggedIn = false }) {
     {
       id: 1,
       type: 'default',
-      value: 'Notification available now'
+      value: 'New course available'
     },
     {
       id: 2,
       type: 'urgent',
-      value: 'Notification available now'
+      value: 'New resume available'
     },
     {
       id: 3,
