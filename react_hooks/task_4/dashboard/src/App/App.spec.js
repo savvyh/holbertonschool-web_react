@@ -236,4 +236,44 @@ describe('App Component', () => {
 
     consoleSpy.mockRestore();
   });
+
+  test('displayDrawer is initially true', () => {
+    render(<App />);
+    expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
+  });
+
+  test('handleDisplayDrawer sets displayDrawer to true', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const closeButton = screen.queryByRole('button', { name: /close/i });
+    if (closeButton) {
+      await user.click(closeButton);
+      
+      await waitFor(() => {
+        expect(screen.queryByText(/here is the list of notifications/i)).not.toBeInTheDocument();
+      });
+    }
+
+    const notificationsTitle = screen.getByText(/your notifications/i);
+    await user.click(notificationsTitle);
+
+    await waitFor(() => {
+      expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
+    });
+  });
+
+  test('handleHideDrawer sets displayDrawer to false', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
+
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    await user.click(closeButton);
+
+    await waitFor(() => {
+      expect(screen.queryByText(/here is the list of notifications/i)).not.toBeInTheDocument();
+    });
+  });
 });
