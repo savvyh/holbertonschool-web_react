@@ -69,7 +69,6 @@ function App() {
 
   return (
     <AppContext.Provider value={contextValue}>
-      <Fragment>
         <div className="min-h-screen flex flex-col m-0">
           <div className="absolute top-0 right-0 z-10">
             <Notifications 
@@ -97,7 +96,6 @@ function App() {
           </div>
           <Footer />
         </div>
-      </Fragment>
     </AppContext.Provider>
   );
 }
