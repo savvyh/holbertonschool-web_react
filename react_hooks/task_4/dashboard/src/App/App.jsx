@@ -29,7 +29,6 @@ function App() {
   const [displayDrawer, setDisplayDrawer] = useState(true)
   const [user, setUser] = useState({email: '', password: '', isLoggedIn: false})
   const [notifications, setNotifications] = useState(notificationsList);
-  const [courses, setCourses] = useState(coursesList);
 
   const logIn = (email, password) => {
     setUser({
