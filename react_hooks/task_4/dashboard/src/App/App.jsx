@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AppContext from '../Context/context';
 import Notifications from '../Notifications/Notifications';
 import Header from '../Header/Header';
@@ -30,36 +30,36 @@ function App() {
   const [notifications, setNotifications] = useState(notificationsList);
   const [courses, setCourses] = useState(coursesList);
 
-  const logIn = (email, password) => {
+  const logIn = useCallback((email, password) => {
     setUser({
       email,
       password,
       isLoggedIn: true
     });
-  };
+  }, []);
 
-  const logOut = () => {
+  const logOut = useCallback(() => {
     setUser({
       email: '',
       password: '',
       isLoggedIn: false
     });
-  };
+  }, []);
 
-  const handleDisplayDrawer = () => {
+  const handleDisplayDrawer = useCallback(() => {
     setDisplayDrawer(true);
-  };
+  }, []);
 
-  const handleHideDrawer = () => {
+  const handleHideDrawer = useCallback(() => {
     setDisplayDrawer(false);
-  };
+  }, []);
 
-  const markNotificationAsRead = (id) => {
+  const markNotificationAsRead = useCallback((id) => {
     console.log(`Notification ${id} has been marked as read`);
     setNotifications(prevNotifications =>
       prevNotifications.filter(notification => notification.id !== id)
     );
-  };
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
