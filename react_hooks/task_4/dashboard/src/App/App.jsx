@@ -1,7 +1,7 @@
 import CourseList from '../CourseList/CourseList';
 import Login from '../Login/Login';
 import WithLogging from '../HOC/WithLogging';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppContext from '../Context/context';
 import Notifications from '../Notifications/Notifications';
 import Header from '../Header/Header';
@@ -66,7 +66,7 @@ function App() {
     user,
     logOut
   };
-  
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.ctrlKey && event.key === 'h') {
