@@ -75,7 +75,7 @@ function App() {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [logOut]);
 
   return (
     <AppContext.Provider value={{ user: user, logOut: logOut }}>
