@@ -1,35 +1,42 @@
-import React, { useState, useCallback } from 'react';
-import { getLatestNotification } from '../utils/utils';
+import React, { useState, useEffect, useCallback } from 'react';
+import AppContext from '../Context/context';
 import Notifications from '../Notifications/Notifications';
 import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
-import Login from '../Login/Login';
-import CourseList from '../CourseList/CourseList';
 import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
+import Footer from '../Footer/Footer';
+import CourseList from '../CourseList/CourseList';
+import Login from '../Login/Login';
 import WithLogging from '../HOC/WithLogging';
-import AppContext from '../Context/context';
 
-const LoginWithLogging = WithLogging(Login);
 const CourseListWithLogging = WithLogging(CourseList);
+const LoginWithLogging = WithLogging(Login);
 
 function App() {
-  const [displayDrawer, setDisplayDrawer] = useState(true);
-  const [user, setUser] = useState({
-    email: '',
-    password: '',
-    isLoggedIn: false
-  });
-  const [notifications, setNotifications] = useState([
+  const notificationsList = [
     { id: 1, type: 'default', value: 'New course available' },
     { id: 2, type: 'urgent', value: 'New resume available' },
-    { id: 3, type: 'urgent', html: { __html: getLatestNotification() } }
-  ]);
-  const [courses, setCourses] = useState([
-    { id: 1, name: 'ES6', credit: '60' },
-    { id: 2, name: 'Webpack', credit: '20' },
-    { id: 3, name: 'React', credit: '40' }
-  ]);
+    { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } }
+  ];
+
+  const coursesList = [
+    { id: 1, name: 'ES6', credit: 60 },
+    { id: 2, name: 'Webpack', credit: 20 },
+    { id: 3, name: 'React', credit: 40 }
+  ];
+
+  const [displayDrawer, setDisplayDrawer] = useState(true);
+  const [user, setUser] = useState({ email: '', password: '', isLoggedIn: false });
+  const [notifications, setNotifications] = useState(notificationsList);
+  const [courses, setCourses] = useState(coursesList);
+
+  const logIn = useCallback((email, password) => {
+    setUser({
+      email,
+      password,
+      isLoggedIn: true
+    });
+  }, []);
 
   const logOut = useCallback(() => {
     setUser({
@@ -39,71 +46,62 @@ function App() {
     });
   }, []);
 
-  const logIn = useCallback((email, password) => {
-    setUser({
-      email: email,
-      password: password,
-      isLoggedIn: true
-    });
-  }, []);
-
-  const markNotificationAsRead = useCallback((id) => {
-    console.log(`Notification ${id} has been marked as read`);
-    setNotifications(prevNotifications => prevNotifications.filter(notification => notification.id !== id));
-  }, []);
-
   const handleDisplayDrawer = useCallback(() => {
-    console.log('handleDisplayDrawer called');
     setDisplayDrawer(true);
   }, []);
 
   const handleHideDrawer = useCallback(() => {
-    console.log('handleHideDrawer called');
     setDisplayDrawer(false);
+  }, []);
+
+  const markNotificationAsRead = useCallback((id) => {
+    console.log(`Notification ${id} has been marked as read`);
+    setNotifications(prevNotifications =>
+      prevNotifications.filter(notification => notification.id !== id)
+    );
   }, []);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.ctrlKey && event.key === 'h') {
+        event.preventDefault();
         alert('Logging you out');
         logOut();
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
-    
+
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [logOut]);
+  }, []);
 
   return (
     <AppContext.Provider value={{ user: user, logOut: logOut }}>
-      <div className="root-notifications">
-        <Notifications 
-          notifications={notifications} 
-          displayDrawer={displayDrawer}
-          handleDisplayDrawer={handleDisplayDrawer}
-          handleHideDrawer={handleHideDrawer}
-          markNotificationAsRead={markNotificationAsRead}
-        />
-      </div>
-      <div className="App h-screen max-w-full flex flex-col max-[912px]:h-auto">
+      <div className="min-h-screen flex flex-col m-0">
+        <div className="absolute top-0 right-0 z-10">
+          <Notifications
+            notifications={notifications}
+            displayDrawer={displayDrawer}
+            handleDisplayDrawer={handleDisplayDrawer}
+            handleHideDrawer={handleHideDrawer}
+            markNotificationAsRead={markNotificationAsRead}
+          />
+        </div>
         <Header />
-        <div className="flex-1 flex flex-col max-[912px]:p-0">
-
+        <div className="flex-1 px-4 md:px-8">
           {user.isLoggedIn ? (
             <BodySectionWithMarginBottom title="Course list">
               <CourseListWithLogging courses={courses} />
             </BodySectionWithMarginBottom>
           ) : (
-            <div className="mb-10 px-5 max-[912px]:px-3 max-[912px]:mb-5">
-              <h2 className="text-xl font-bold pb-2.5 mb-2.5 border-b-[3px] border-[var(--main-color)]">Log in to continue</h2> 
-              <LoginWithLogging logIn={logIn} />
-            </div>
+            <BodySectionWithMarginBottom title="Log in to continue">
+              <LoginWithLogging logIn={logIn} email={user.email} password={user.password} />
+            </BodySectionWithMarginBottom>
           )}
           <BodySection title="News from the School">
-            <p>Holberton School News goes here</p>
+            <p>ipsum Lorem ipsum dolor sit amet consectetur, adipisicing elit. Similique, asperiores architecto blanditiis fuga doloribus sit illum aliquid ea distinctio minus accusantium, impedit quo voluptatibus ut magni dicta. Recusandae, quia dicta?</p>
           </BodySection>
         </div>
         <Footer />
@@ -112,4 +110,4 @@ function App() {
   );
 }
 
-export default App;
+export default React.memo(App);
