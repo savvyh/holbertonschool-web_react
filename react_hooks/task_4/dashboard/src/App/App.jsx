@@ -29,6 +29,7 @@ function App() {
   const [displayDrawer, setDisplayDrawer] = useState(true)
   const [user, setUser] = useState({email: '', password: '', isLoggedIn: false})
   const [notifications, setNotifications] = useState(notificationsList);
+  const [courses, setCourses] = useState(coursesList);
 
   const logIn = (email, password) => {
     setUser({
@@ -65,6 +66,22 @@ function App() {
     user,
     logOut
   };
+  
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey && event.key === 'h') {
+        event.preventDefault();
+        alert('Logging you out');
+        logOut();
+      }
+    };
+  
+    document.addEventListener('keydown', handleKeyDown);
+  
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   return (
     <AppContext.Provider value={contextValue}>
