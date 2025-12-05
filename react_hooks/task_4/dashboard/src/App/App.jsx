@@ -27,8 +27,8 @@ function App() {
 
   const [displayDrawer, setDisplayDrawer] = useState(true);
   const [user, setUser] = useState({ email: '', password: '', isLoggedIn: false });
-  const [notifications, setNotifications] = useState(notificationsList);
-  const [courses, setCourses] = useState(coursesList);
+  const [notifications, setNotifications] = useState([]);
+  const [courses, setCourses] = useState([]);
 
   const logIn = useCallback((email, password) => {
     setUser({
