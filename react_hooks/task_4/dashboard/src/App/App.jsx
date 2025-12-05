@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import AppContext from '../Context/context';
 import Notifications from '../Notifications/Notifications';
 import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
+import Login from '../Login/Login';
+import CourseList from '../CourseList/CourseList';
 import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
-import Footer from '../Footer/Footer';
-import CourseList from '../CourseList/CourseList';
-import Login from '../Login/Login';
 import WithLogging from '../HOC/WithLogging';
 
 const CourseListWithLogging = WithLogging(CourseList);
@@ -27,8 +27,8 @@ function App() {
 
   const [displayDrawer, setDisplayDrawer] = useState(true);
   const [user, setUser] = useState({ email: '', password: '', isLoggedIn: false });
-  const [notifications, setNotifications] = useState([]);
-  const [courses, setCourses] = useState([]);
+  const [notifications, setNotifications] = useState(notificationsList);
+  const [courses, setCourses] = useState(coursesList);
 
   const logIn = useCallback((email, password) => {
     setUser({
@@ -60,22 +60,6 @@ function App() {
       prevNotifications.filter(notification => notification.id !== id)
     );
   }, []);
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.ctrlKey && event.key === 'h') {
-        event.preventDefault();
-        alert('Logging you out');
-        logOut();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [logOut]);
 
   return (
     <AppContext.Provider value={{ user: user, logOut: logOut }}>
@@ -110,4 +94,4 @@ function App() {
   );
 }
 
-export default React.memo(App);
+export default App;
