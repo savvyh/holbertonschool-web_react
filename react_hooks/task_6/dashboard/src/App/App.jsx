@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useReducer, useCallback, useEffect } from 'react';
 import axios from 'axios';
 import { getLatestNotification } from '../utils/utils';
-import AppContext from '../Context/context';
+import { appReducer, initialState, APP_ACTIONS } from './appReducer';
 import Notifications from '../Notifications/Notifications';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -15,40 +15,33 @@ const CourseListWithLogging = WithLogging(CourseList);
 const LoginWithLogging = WithLogging(Login);
 
 function App() {
-  const [displayDrawer, setDisplayDrawer] = useState(true);
-  const [user, setUser] = useState({ email: '', password: '', isLoggedIn: false });
-  const [notifications, setNotifications] = useState([]);
-  const [courses, setCourses] = useState([]);
+  const [state, dispatch] = useReducer(appReducer, initialState);
 
   const logIn = useCallback((email, password) => {
-    setUser({
-      email,
-      password,
-      isLoggedIn: true
+    dispatch({
+      type: APP_ACTIONS.LOGIN,
+      payload: { email, password }
     });
   }, []);
 
   const logOut = useCallback(() => {
-    setUser({
-      email: '',
-      password: '',
-      isLoggedIn: false
-    });
+    dispatch({ type: APP_ACTIONS.LOGOUT });
   }, []);
 
   const handleDisplayDrawer = useCallback(() => {
-    setDisplayDrawer(true);
+    dispatch({ type: APP_ACTIONS.TOGGLE_DRAWER });
   }, []);
 
   const handleHideDrawer = useCallback(() => {
-    setDisplayDrawer(false);
+    dispatch({ type: APP_ACTIONS.TOGGLE_DRAWER });
   }, []);
 
   const markNotificationAsRead = useCallback((id) => {
     console.log(`Notification ${id} has been marked as read`);
-    setNotifications(prevNotifications =>
-      prevNotifications.filter(notification => notification.id !== id)
-    );
+    dispatch({
+      type: APP_ACTIONS.MARK_NOTIFICATION_READ,
+      payload: { id }
+    });
   }, []);
 
   useEffect(() => {
@@ -64,7 +57,10 @@ function App() {
           }
           return notification;
         });
-        setNotifications(notificationsData);
+        dispatch({
+          type: APP_ACTIONS.SET_NOTIFICATIONS,
+          payload: { notifications: notificationsData }
+        });
       } catch (error) {
         console.error('Error fetching notifications:', error);
       }
@@ -77,45 +73,46 @@ function App() {
     const fetchCourses = async () => {
       try {
         const response = await axios.get('/courses.json');
-        setCourses(response.data);
+        dispatch({
+          type: APP_ACTIONS.SET_COURSES,
+          payload: { courses: response.data }
+        });
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
     };
 
     fetchCourses();
-  }, [user]);
+  }, [state.user]);
 
   return (
-    <AppContext.Provider value={{ user: user, logOut: logOut }}>
-      <div className="min-h-screen flex flex-col m-0">
-        <div className="absolute top-0 right-0 z-10">
-          <Notifications
-            notifications={notifications}
-            displayDrawer={displayDrawer}
-            handleDisplayDrawer={handleDisplayDrawer}
-            handleHideDrawer={handleHideDrawer}
-            markNotificationAsRead={markNotificationAsRead}
-          />
-        </div>
-        <Header />
-        <div className="flex-1 px-4 md:px-8">
-          {user.isLoggedIn ? (
-            <BodySectionWithMarginBottom title="Course list">
-              <CourseListWithLogging courses={courses} />
-            </BodySectionWithMarginBottom>
-          ) : (
-            <BodySectionWithMarginBottom title="Log in to continue">
-              <LoginWithLogging logIn={logIn} email={user.email} password={user.password} />
-            </BodySectionWithMarginBottom>
-          )}
-          <BodySection title="News from the School">
-            <p>ipsum Lorem ipsum dolor sit amet consectetur, adipisicing elit. Similique, asperiores architecto blanditiis fuga doloribus sit illum aliquid ea distinctio minus accusantium, impedit quo voluptatibus ut magni dicta. Recusandae, quia dicta?</p>
-          </BodySection>
-        </div>
-        <Footer />
+    <div className="min-h-screen flex flex-col m-0">
+      <div className="absolute top-0 right-0 z-10">
+        <Notifications
+          notifications={state.notifications}
+          displayDrawer={state.displayDrawer}
+          handleDisplayDrawer={handleDisplayDrawer}
+          handleHideDrawer={handleHideDrawer}
+          markNotificationAsRead={markNotificationAsRead}
+        />
       </div>
-    </AppContext.Provider>
+      <Header user={state.user} logOut={logOut} />
+      <div className="flex-1 px-4 md:px-8">
+        {state.user.isLoggedIn ? (
+          <BodySectionWithMarginBottom title="Course list">
+            <CourseListWithLogging courses={state.courses} />
+          </BodySectionWithMarginBottom>
+        ) : (
+          <BodySectionWithMarginBottom title="Log in to continue">
+            <LoginWithLogging logIn={logIn} email={state.user.email} password={state.user.password} />
+          </BodySectionWithMarginBottom>
+        )}
+        <BodySection title="News from the School">
+          <p>ipsum Lorem ipsum dolor sit amet consectetur, adipisicing elit. Similique, asperiores architecto blanditiis fuga doloribus sit illum aliquid ea distinctio minus accusantium, impedit quo voluptatibus ut magni dicta. Recusandae, quia dicta?</p>
+        </BodySection>
+      </div>
+      <Footer user={state.user} />
+    </div>
   );
 }
 
