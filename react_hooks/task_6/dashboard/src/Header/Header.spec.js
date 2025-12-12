@@ -1,6 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import Header from './Header';
-import AppContext from '../Context/context';
 
 describe('Header Component', () => {
   test('contains holberton logo image', () => {
@@ -18,8 +17,14 @@ describe('Header Component', () => {
     expect(h1Element).toBeInTheDocument();
   });
 
-  test('does not render logoutSection when using default context value', () => {
-    render(<Header />);
+  test('does not render logoutSection when user is logged out', () => {
+    const user = {
+      email: '',
+      password: '',
+      isLoggedIn: false
+    };
+
+    render(<Header user={user} />);
     const logoutSection = screen.queryByText(/welcome/i);
     expect(logoutSection).not.toBeInTheDocument();
   });
@@ -30,13 +35,9 @@ describe('Header Component', () => {
       password: 'password123',
       isLoggedIn: true
     };
-    const logOut = () => {};
+    const logOut = jest.fn();
 
-    render(
-      <AppContext.Provider value={{ user, logOut }}>
-        <Header />
-      </AppContext.Provider>
-    );
+    render(<Header user={user} logOut={logOut} />);
 
     const logoutSection = screen.getByText(/welcome test@example.com/i);
     expect(logoutSection).toBeInTheDocument();
@@ -51,11 +52,7 @@ describe('Header Component', () => {
     };
     const logOut = jest.fn();
 
-    render(
-      <AppContext.Provider value={{ user, logOut }}>
-        <Header />
-      </AppContext.Provider>
-    );
+    render(<Header user={user} logOut={logOut} />);
 
     const logoutLink = screen.getByText(/logout/i);
     fireEvent.click(logoutLink);

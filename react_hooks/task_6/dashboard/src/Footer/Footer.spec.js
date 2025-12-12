@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { getCurrentYear, getFooterCopy } from '../utils/utils';
 import Footer from './Footer';
-import AppContext from '../Context/context';
 
 describe('Footer Component', () => {
   test('renders without crashing', () => {
@@ -32,11 +31,7 @@ describe('Footer Component', () => {
       isLoggedIn: false
     };
 
-    render(
-      <AppContext.Provider value={{ user }}>
-        <Footer />
-      </AppContext.Provider>
-    );
+    render(<Footer user={user} />);
 
     const contactLink = screen.queryByText(/contact us/i);
     expect(contactLink).not.toBeInTheDocument();
@@ -48,13 +43,8 @@ describe('Footer Component', () => {
       password: 'password123',
       isLoggedIn: true
     };
-    const logOut = () => {};
 
-    render(
-      <AppContext.Provider value={{ user, logOut }}>
-        <Footer />
-      </AppContext.Provider>
-    );
+    render(<Footer user={user} />);
 
     const contactLink = screen.getByText(/contact us/i);
     expect(contactLink).toBeInTheDocument();
