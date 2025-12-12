@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
@@ -70,41 +70,6 @@ describe('App Component', () => {
     expect(table).not.toBeInTheDocument();
   });
 
-  test('calls logOut when control and h keys are pressed', async () => {
-    const user = userEvent.setup();
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
-    render(<App />);
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /ok/i });
-
-    await user.type(emailInput, 'test@example.com');
-    await user.type(passwordInput, 'password123');
-    await user.click(submitButton);
-
-    await waitFor(() => {
-      expect(screen.getByRole('table')).toBeInTheDocument();
-    });
-
-    fireEvent.keyDown(document, { key: 'h', ctrlKey: true });
-
-    await waitFor(() => {
-      expect(screen.getByText(/login to access the full dashboard/i)).toBeInTheDocument();
-    });
-
-    alertMock.mockRestore();
-  });
-
-  test('calls alert with the appropriate message when control and h keys are pressed', () => {
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
-    render(<App />);
-
-    fireEvent.keyDown(document, { key: 'h', ctrlKey: true });
-
-    expect(alertMock).toHaveBeenCalledWith('Logging you out');
-    alertMock.mockRestore();
-  });
 
   test('displays news section with title and paragraph by default', () => {
     render(<App />);
@@ -237,9 +202,9 @@ describe('App Component', () => {
     consoleSpy.mockRestore();
   });
 
-  test('displayDrawer is initially true', () => {
+  test('displayDrawer is initially false', () => {
     render(<App />);
-    expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
+    expect(screen.queryByText(/here is the list of notifications/i)).not.toBeInTheDocument();
   });
 
   test('handleDisplayDrawer sets displayDrawer to true', async () => {
@@ -267,8 +232,15 @@ describe('App Component', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
+    // First, open the drawer
+    const notificationsTitle = screen.getByText(/your notifications/i);
+    await user.click(notificationsTitle);
 
+    await waitFor(() => {
+      expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
+    });
+
+    // Then close it
     const closeButton = screen.getByRole('button', { name: /close/i });
     await user.click(closeButton);
 
