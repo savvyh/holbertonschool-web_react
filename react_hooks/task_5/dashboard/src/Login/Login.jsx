@@ -8,7 +8,7 @@ function Login ({logIn, email: loginEmail = '', password: loginPassword = ''}) {
     handleChangeEmail,
     handleChangePassword,
     handleLoginSubmit
-  } = useLogin(logIn);
+  } = useLogin(logIn, loginEmail, loginPassword); 
   
     return (
       <div className="flex flex-col p-5 pl-10 h-[45vh] border-t-4 border-main-color">
