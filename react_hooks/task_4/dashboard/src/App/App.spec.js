@@ -179,12 +179,7 @@ describe('App Component', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    const notificationsTitle = screen.getByText(/your notifications/i);
-    await user.click(notificationsTitle);
-
-    await waitFor(() => {
-      expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
-    });
+    expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
 
     const notificationItems = screen.getAllByRole('listitem');
     expect(notificationItems).toHaveLength(3);
@@ -202,23 +197,21 @@ describe('App Component', () => {
     consoleSpy.mockRestore();
   });
 
-  test('displayDrawer is initially false', () => {
+  test('displayDrawer is initially true', () => {
     render(<App />);
-    expect(screen.queryByText(/here is the list of notifications/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
   });
 
   test('handleDisplayDrawer sets displayDrawer to true', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    const closeButton = screen.queryByRole('button', { name: /close/i });
-    if (closeButton) {
-      await user.click(closeButton);
-      
-      await waitFor(() => {
-        expect(screen.queryByText(/here is the list of notifications/i)).not.toBeInTheDocument();
-      });
-    }
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    await user.click(closeButton);
+    
+    await waitFor(() => {
+      expect(screen.queryByText(/here is the list of notifications/i)).not.toBeInTheDocument();
+    });
 
     const notificationsTitle = screen.getByText(/your notifications/i);
     await user.click(notificationsTitle);
@@ -232,15 +225,8 @@ describe('App Component', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    // First, open the drawer
-    const notificationsTitle = screen.getByText(/your notifications/i);
-    await user.click(notificationsTitle);
+    expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
-    });
-
-    // Then close it
     const closeButton = screen.getByRole('button', { name: /close/i });
     await user.click(closeButton);
 

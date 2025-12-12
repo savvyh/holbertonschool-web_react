@@ -25,7 +25,7 @@ function App() {
     { id: 3, name: 'React', credit: 40 }
   ];
 
-  const [displayDrawer, setDisplayDrawer] = useState(false);
+  const [displayDrawer, setDisplayDrawer] = useState(true);
   const [user, setUser] = useState({ email: '', password: '', isLoggedIn: false });
   const [notifications, setNotifications] = useState(notificationsList);
   const [courses, setCourses] = useState(coursesList);
