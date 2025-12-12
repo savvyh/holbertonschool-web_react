@@ -35,7 +35,8 @@ function useLogin(onLogin, loginEmail = '', loginPassword = '') {
   }
   
   return {
-    formData,
+    email: formData.email,
+    password: formData.password,
     enableSubmit,
     handleChangeEmail,
     handleChangePassword,

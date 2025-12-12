@@ -3,7 +3,8 @@ import useLogin from '../hooks/useLogin';
 
 function Login ({logIn, email: loginEmail = '', password: loginPassword = ''}) {
   const {
-    formData,
+    email,
+    password,
     enableSubmit,
     handleChangeEmail,
     handleChangePassword,
@@ -19,7 +20,7 @@ function Login ({logIn, email: loginEmail = '', password: loginPassword = ''}) {
             type="email"
             name="user_email"
             id="email"
-            value={formData.email}
+            value={email}
             onChange={handleChangeEmail}
             className="border rounded w-full sm:w-auto"
           />
@@ -28,7 +29,7 @@ function Login ({logIn, email: loginEmail = '', password: loginPassword = ''}) {
             type="password"
             name="user_password"
             id="password"
-            value={formData.password}
+            value={password}
             onChange={handleChangePassword}
             className="border rounded w-full sm:w-auto"
           />
