@@ -56,7 +56,6 @@ function App() {
       try {
         const response = await axios.get('/notifications.json');
         const notificationsData = response.data.map(notification => {
-      
           if (notification.html === '__LATEST_NOTIFICATION__') {
             return {
               ...notification,
@@ -74,7 +73,6 @@ function App() {
     fetchNotifications();
   }, []);
 
-  
   useEffect(() => {
     const fetchCourses = async () => {
       try {
