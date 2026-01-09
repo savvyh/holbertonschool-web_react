@@ -4,7 +4,12 @@ import Footer from './Footer';
 
 describe('Footer Component', () => {
   test('renders without crashing', () => {
-    render(<Footer />);
+    const user = {
+      email: '',
+      password: '',
+      isLoggedIn: false
+    };
+    render(<Footer user={user} />);
     const currentYear = new Date().getFullYear();
     const copyrightText = screen.getByText(
       new RegExp(`copyright ${currentYear}`, 'i')
@@ -13,7 +18,12 @@ describe('Footer Component', () => {
   });
 
   test('p element renders the expected string', () => {
-    render(<Footer />);
+    const user = {
+      email: '',
+      password: '',
+      isLoggedIn: false
+    };
+    render(<Footer user={user} />);
     const currentYear = getCurrentYear();
     const footerText = getFooterCopy(true);
     
