@@ -1,14 +1,31 @@
 import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import Footer from './Footer';
+import authReducer from '../../../features/auth/authSlice';
+
+const renderWithRedux = (component, initialState = {}) => {
+  const store = configureStore({
+    reducer: {
+      auth: authReducer,
+    },
+    preloadedState: {
+      auth: {
+        user: {
+          email: '',
+          password: '',
+        },
+        isLoggedIn: false,
+        ...initialState.auth,
+      },
+    },
+  });
+
+  return render(<Provider store={store}>{component}</Provider>);
+};
 
 test('It should render footer with copyright text', () => {
-  const defaultUser = {
-    email: '',
-    password: '',
-    isLoggedIn: false
-  };
-
-  render(<Footer user={defaultUser} />)
+  renderWithRedux(<Footer />);
 
   const footerParagraph = screen.getByText(/copyright/i);
 
@@ -17,26 +34,22 @@ test('It should render footer with copyright text', () => {
 });
 
 test('Contact us link is not displayed when user is logged out', () => {
-  const loggedOutUser = {
-    email: '',
-    password: '',
-    isLoggedIn: false
-  };
-
-  render(<Footer user={loggedOutUser} />);
+  renderWithRedux(<Footer />);
 
   const contactLink = screen.queryByText(/contact us/i);
   expect(contactLink).not.toBeInTheDocument();
 });
 
 test('Contact us link is displayed when user is logged in', () => {
-  const loggedInUser = {
-    email: 'test@test.com',
-    password: 'password123',
-    isLoggedIn: true
-  };
-
-  render(<Footer user={loggedInUser} />);
+  renderWithRedux(<Footer />, {
+    auth: {
+      user: {
+        email: 'test@test.com',
+        password: 'password123',
+      },
+      isLoggedIn: true,
+    },
+  });
 
   const contactLink = screen.getByText(/contact us/i);
   expect(contactLink).toBeInTheDocument();
