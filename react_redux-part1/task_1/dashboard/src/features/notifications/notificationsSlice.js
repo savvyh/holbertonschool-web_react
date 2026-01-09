@@ -16,7 +16,7 @@ const fetchNotifications = createAsyncThunk('notifications/fetchNotifications', 
   return response.data;
 });
 
-const notificationsSlice = createSlice({
+export const notificationsSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
@@ -38,6 +38,5 @@ const notificationsSlice = createSlice({
   },
 });
 
-export { fetchNotifications };
 export const { markNotificationAsRead, showDrawer, hideDrawer } = notificationsSlice.actions;
 export default notificationsSlice.reducer;
