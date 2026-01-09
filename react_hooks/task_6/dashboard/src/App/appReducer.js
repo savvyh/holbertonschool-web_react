@@ -18,7 +18,15 @@ export const initialState = {
   courses: []
 };
 
-export function appReducer(state = initialState, action) {
+export function appReducer(state, action) {
+  if (state === undefined) {
+    state = initialState;
+  }
+  
+  if (!action || !action.type) {
+    return state;
+  }
+  
   switch (action.type) {
     case APP_ACTIONS.LOGIN:
       return {
