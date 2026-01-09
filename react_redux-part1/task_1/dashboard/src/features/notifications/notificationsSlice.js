@@ -11,12 +11,12 @@ const ENDPOINTS = {
   notifications: `${API_BASE_URL}/notifications.json`,
 };
 
-const fetchNotifications = createAsyncThunk('notifications/fetchNotifications', async () => {
+export const fetchNotifications = createAsyncThunk('notifications/fetchNotifications', async () => {
   const response = await axios.get(ENDPOINTS.notifications);
   return response.data;
 });
 
-export const notificationsSlice = createSlice({
+const notificationsSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
