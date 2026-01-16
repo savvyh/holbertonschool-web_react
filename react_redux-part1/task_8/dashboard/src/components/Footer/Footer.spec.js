@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import Footer from './Footer';
-import authReducer from '../../../features/auth/authSlice';
-import { getCurrentYear } from '../../../utils/utils';
+import authReducer from '../../features/auth/authSlice';
+import { getCurrentYear } from '../../utils/utils';
 
 const renderWithRedux = (component, initialState = {}) => {
   const store = configureStore({

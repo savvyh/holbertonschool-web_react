@@ -1,9 +1,9 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import Notifications from "./Notifications";
-import notificationsReducer from "../../../features/notifications/notificationsSlice";
-import { fetchNotifications } from "../../../features/notifications/notificationsSlice";
+import notificationsReducer from "../../features/notifications/notificationsSlice";
+import { fetchNotifications } from "../../features/notifications/notificationsSlice";
 import mockAxios from 'jest-mock-axios';
 
 afterEach(() => {
@@ -40,7 +40,9 @@ describe("Notifications", () => {
   test('Mock the fetchNotifications API call, render the Notifications component and verify that the notification items are displayed', async () => {
     const { store } = renderWithRedux(<Notifications />);
 
-    store.dispatch(fetchNotifications.fulfilled(mockNotificationsData));
+    act(() => {
+      store.dispatch(fetchNotifications.fulfilled(mockNotificationsData));
+    });
 
     await waitFor(() => {
       expect(screen.getByText('New course available')).toBeInTheDocument();

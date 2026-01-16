@@ -1,10 +1,10 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import CourseList from './CourseList';
-import coursesReducer from '../../../features/courses/coursesSlice';
-import { logout } from '../../../features/auth/authSlice';
-import authReducer from '../../../features/auth/authSlice';
+import coursesReducer from '../../features/courses/coursesSlice';
+import { logout } from '../../features/auth/authSlice';
+import authReducer from '../../features/auth/authSlice';
 
 const renderWithRedux = (component, initialState = {}) => {
   const store = configureStore({
@@ -70,7 +70,9 @@ describe('CourseList', () => {
 
     expect(store.getState().courses.courses).toHaveLength(3);
 
-    store.dispatch(logout());
+    act(() => {
+      store.dispatch(logout());
+    });
 
     expect(store.getState().courses.courses).toHaveLength(0);
   });
