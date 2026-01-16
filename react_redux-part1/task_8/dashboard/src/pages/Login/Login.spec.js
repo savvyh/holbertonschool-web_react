@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import userEvent from '@testing-library/user-event';
 import Login from './Login';
 import authReducer from '../../../features/auth/authSlice';
 
@@ -30,7 +29,7 @@ const renderWithRedux = (component, initialState = {}) => {
 
 describe('Login', () => {
   test('Render the Login component and verify that the login form is displayed with email, password fields, and submit button', () => {
-    const { container } = renderWithRedux(<Login />);
+    renderWithRedux(<Login />);
 
     const emailLabelElement = screen.getByLabelText(/email/i);
     const passwordLabelElement = screen.getByLabelText(/password/i);

@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import Header from './Header';
 import authReducer from '../../../features/auth/authSlice';
-import { login, logout } from '../../../features/auth/authSlice';
+import { login } from '../../../features/auth/authSlice';
 
 const renderWithRedux = (component, initialState = {}) => {
   const store = configureStore({
