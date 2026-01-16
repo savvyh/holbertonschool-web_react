@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import Notifications from "./Notifications";
 import { getLatestNotification } from "../../utils/utils";
-import notificationsReducer from "../../features/notifications/notificationsSlice";
+import notificationsReducer from "../../../features/notifications/notificationsSlice";
 
 jest.mock("../../utils/utils", () => ({
   getLatestNotification: jest.fn(),
