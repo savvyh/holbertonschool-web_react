@@ -12,7 +12,8 @@ const ENDPOINTS = {
 
 export const fetchCourses = createAsyncThunk('courses/fetchCourses', async () => {
   const response = await fetch(ENDPOINTS.courses);
-  return response.json();
+  const data = await response.json();
+  return data.courses || data;
 });
 
 const coursesSlice = createSlice({

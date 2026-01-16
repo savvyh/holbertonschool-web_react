@@ -1,43 +1,60 @@
 import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import Footer from './Footer';
+import authReducer from '../../../features/auth/authSlice';
+import { getCurrentYear } from '../../../utils/utils';
 
-test('It should render footer with copyright text', () => {
-  const defaultUser = {
-    email: '',
-    password: '',
-    isLoggedIn: false
-  };
+const renderWithRedux = (component, initialState = {}) => {
+  const store = configureStore({
+    reducer: {
+      auth: authReducer,
+    },
+    preloadedState: {
+      auth: {
+        user: {
+          email: '',
+          password: '',
+        },
+        isLoggedIn: false,
+        ...initialState.auth,
+      },
+    },
+  });
 
-  render(<Footer user={defaultUser} />)
+  return render(<Provider store={store}>{component}</Provider>);
+};
 
-  const footerParagraph = screen.getByText(/copyright/i);
+describe('Footer', () => {
+  test('Render the Footer component and verify that the Copyright {current year} - Holberton School text is displayed', () => {
+    renderWithRedux(<Footer />);
 
-  expect(footerParagraph).toHaveTextContent(new RegExp(`copyright ${(new Date()).getFullYear()}`, 'i'))
-  expect(footerParagraph).toHaveTextContent(/holberton school/i)
-});
+    const footerParagraph = screen.getByText(/copyright/i);
+    const currentYear = getCurrentYear();
 
-test('Contact us link is not displayed when user is logged out', () => {
-  const loggedOutUser = {
-    email: '',
-    password: '',
-    isLoggedIn: false
-  };
+    expect(footerParagraph).toHaveTextContent(new RegExp(`copyright ${currentYear}`, 'i'));
+    expect(footerParagraph).toHaveTextContent(/holberton school/i);
+  });
 
-  render(<Footer user={loggedOutUser} />);
+  test('Create a mock store with isLoggedIn set to true, render the Footer component and verify that the "Contact us" link is displayed', () => {
+    renderWithRedux(<Footer />, {
+      auth: {
+        isLoggedIn: true,
+      },
+    });
 
-  const contactLink = screen.queryByText(/contact us/i);
-  expect(contactLink).not.toBeInTheDocument();
-});
+    const contactLink = screen.getByText(/contact us/i);
+    expect(contactLink).toBeInTheDocument();
+  });
 
-test('Contact us link is displayed when user is logged in', () => {
-  const loggedInUser = {
-    email: 'test@test.com',
-    password: 'password123',
-    isLoggedIn: true
-  };
+  test('Create a mock store with isLoggedIn set to false, render the Footer and verify that the "Contact us" link is not displayed', () => {
+    renderWithRedux(<Footer />, {
+      auth: {
+        isLoggedIn: false,
+      },
+    });
 
-  render(<Footer user={loggedInUser} />);
-
-  const contactLink = screen.getByText(/contact us/i);
-  expect(contactLink).toBeInTheDocument();
+    const contactLink = screen.queryByText(/contact us/i);
+    expect(contactLink).not.toBeInTheDocument();
+  });
 });

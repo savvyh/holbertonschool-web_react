@@ -13,7 +13,7 @@ const ENDPOINTS = {
 
 export const fetchNotifications = createAsyncThunk('notifications/fetchNotifications', async () => {
   const response = await axios.get(ENDPOINTS.notifications);
-  return response.data;
+  return response.data.notifications || response.data;
 });
 
 const notificationsSlice = createSlice({
