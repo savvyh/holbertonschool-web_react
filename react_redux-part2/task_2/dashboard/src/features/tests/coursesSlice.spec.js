@@ -28,7 +28,11 @@ describe('coursesSlice', () => {
       const action = fetchCourses.fulfilled(mockCourses, 'courses/fetchCourses');
       const newState = coursesReducer(initialState, action);
 
-      expect(newState.courses).toEqual(mockCourses);
+      expect(newState.courses).toEqual([
+        { id: 1, name: 'ES6', credit: 60, isSelected: false },
+        { id: 2, name: 'Webpack', credit: 20, isSelected: false },
+        { id: 3, name: 'React', credit: 40, isSelected: false }
+      ]);
     });
   });
 
