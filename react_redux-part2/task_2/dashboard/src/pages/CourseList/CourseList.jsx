@@ -1,7 +1,8 @@
 import { StyleSheet, css } from 'aphrodite';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import CourseListRow from './CourseListRow/CourseListRow';
 import WithLogging from '../../components/HOC/WithLogging';
+import { selectCourse, unSelectCourse } from '../../features/courses/coursesSlice';
 
 const styles = StyleSheet.create({
   courses: {
@@ -26,7 +27,17 @@ const styles = StyleSheet.create({
 });
 
 function CourseList() {
+  const dispatch = useDispatch();
   const courses = useSelector((state) => state.courses.courses);
+
+  const onChangeRow = (id, checked) => {
+    if (checked) {
+      dispatch(selectCourse(id));
+    } else {
+      dispatch(unSelectCourse(id));
+    }
+  };
+
   return (
     <div className={css(styles.courses)}>
       {
@@ -51,6 +62,9 @@ function CourseList() {
                     key={course.id} 
                     textFirstCell={course.name} 
                     textSecondCell={course.credit} 
+                    id={course.id}
+                    checked={course.isSelected}
+                    changeRow={onChangeRow}
                   />
                 ))
               }
