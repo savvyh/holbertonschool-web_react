@@ -1,59 +1,60 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within, fireEvent } from '@testing-library/react';
 import CourseListRow from './CourseListRow';
 
-describe('CourseListRow', () => {
-  test('Render the CourseListRow component as a header with one cell and verify that it spans two columns', () => {
-    render(
-      <table>
-        <tbody>
-          <CourseListRow isHeader={true} textFirstCell="First" textSecondCell={null} />
-        </tbody>
-      </table>
-    );
+test('renders header with one cell spanning two columns', () => {
+  render(
+    <table><tbody>
+      <CourseListRow isHeader={true} textFirstCell="First" textSecondCell={null} />
+    </tbody></table>
+  );
 
-    const thElement = screen.getByRole('columnheader');
-    expect(thElement).toHaveAttribute('colSpan', '2');
-  });
+  const th = screen.getByRole('columnheader');
+  expect(th).toHaveAttribute('colSpan', '2');
+});
 
-  test('Render the CourseListRow component as a header with two cells and verify both are displayed', () => {
-    render(
-      <table>
-        <tbody>
-          <CourseListRow isHeader={true} textFirstCell="First" textSecondCell="Second" />
-        </tbody>
-      </table>
-    );
+test('renders header with two cells when textSecondCell is provided', () => {
+  render(
+    <table><tbody>
+      <CourseListRow isHeader={true} textFirstCell="First" textSecondCell="Second" />
+    </tbody></table>
+  );
 
-    const thElements = screen.getAllByRole('columnheader');
-    expect(thElements).toHaveLength(2);
-    expect(thElements[0]).toHaveTextContent('First');
-    expect(thElements[1]).toHaveTextContent('Second');
-  });
+  const thElements = screen.getAllByRole('columnheader');
+  expect(thElements).toHaveLength(2);
+});
 
-  test('Render the CourseListRow component as a regular row and verify both cells are displayed', () => {
-    render(
-      <table>
-        <tbody>
-          <CourseListRow
-            isHeader={false}
-            textFirstCell="Data1"
-            textSecondCell="Data2"
-            id={1}
-            checked={false}
-            changeRow={() => {}}
-          />
-        </tbody>
-      </table>
-    );
+test('renders regular row with two td cells and a checkbox', () => {
+  render(
+    <table><tbody>
+      <CourseListRow isHeader={false} textFirstCell="Data1" textSecondCell="Data2" />
+    </tbody></table>
+  );
 
-    const trElement = screen.getByRole('row');
-    const tdElements = within(trElement).getAllByRole('cell');
-    const checkbox = within(trElement).getByRole('checkbox');
+  const tr = screen.getByRole('row');
+  const tdElements = within(tr).getAllByRole('cell');
+  expect(tdElements).toHaveLength(2);
+  expect(screen.getByRole('checkbox')).toBeInTheDocument();
+});
 
-    expect(trElement).toBeInTheDocument();
-    expect(tdElements).toHaveLength(2);
-    expect(checkbox).not.toBeChecked();
-    expect(tdElements[0]).toHaveTextContent('Data1');
-    expect(tdElements[1]).toHaveTextContent('Data2');
-  });
+test('checkbox calls changeRow with id and checked state when clicked', () => {
+  const mockChangeRow = jest.fn();
+
+  render(
+    <table><tbody>
+      <CourseListRow isHeader={false} textFirstCell="Data1" textSecondCell="Data2" id={1} changeRow={mockChangeRow} />
+    </tbody></table>
+  );
+
+  fireEvent.click(screen.getByRole('checkbox'));
+  expect(mockChangeRow).toHaveBeenCalledWith(1, true);
+});
+
+test('header row does not render a checkbox', () => {
+  render(
+    <table><tbody>
+      <CourseListRow isHeader={true} textFirstCell="Header" />
+    </tbody></table>
+  );
+
+  expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
 });

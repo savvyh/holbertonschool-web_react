@@ -1,102 +1,110 @@
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
+import rootReducer from '../../app/rootReducer';
 import CourseList from './CourseList';
-import coursesReducer from '../../features/courses/coursesSlice';
 import { logout } from '../../features/auth/authSlice';
-import authReducer from '../../features/auth/authSlice';
+import mockAxios from 'jest-mock-axios';
 
-const renderWithRedux = (component, initialState = {}) => {
-  const store = configureStore({
-    reducer: {
-      courses: coursesReducer,
-      auth: authReducer,
-    },
-    preloadedState: {
-      courses: {
-        courses: [],
-        ...initialState.courses,
-      },
-      auth: {
-        user: {
-          email: '',
-          password: '',
-        },
-        isLoggedIn: false,
-        ...initialState.auth,
-      },
-    },
+afterEach(() => {
+  mockAxios.reset();
+});
+
+const createMockStore = (preloadedState) => {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
   });
-
-  return {
-    ...render(<Provider store={store}>{component}</Provider>),
-    store,
-  };
 };
 
-const mockCoursesData = [
-  { id: 1, name: 'ES6', credit: 60, isSelected: false },
-  { id: 2, name: 'Webpack', credit: 20, isSelected: false },
-  { id: 3, name: 'React', credit: 40, isSelected: false }
-];
-
-describe('CourseList', () => {
-  test('Mock the fetchCourses API call, render the CourseList and verify that the courses list is displayed', async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        json: () => Promise.resolve(mockCoursesData),
-      })
-    );
-
-    renderWithRedux(<CourseList />, {
-      courses: {
-        courses: mockCoursesData,
-      },
-    });
-
-    await waitFor(() => {
-      expect(screen.getByText('ES6')).toBeInTheDocument();
-      expect(screen.getByText('Webpack')).toBeInTheDocument();
-      expect(screen.getByText('React')).toBeInTheDocument();
-    });
+test('displays courses list when courses are in the store', () => {
+  const store = createMockStore({
+    auth: { user: { email: 'test@test.com', password: 'pass' }, isLoggedIn: true },
+    notifications: { notifications: [], loading: false },
+    courses: {
+      courses: [
+        { id: 1, name: 'ES6', credit: 60, isSelected: false },
+        { id: 2, name: 'Webpack', credit: 20, isSelected: false },
+        { id: 3, name: 'React', credit: 40, isSelected: false },
+      ],
+    },
   });
 
-  test('Dispatch the logout action, render the CourseList component and verify that the courses array is reset', () => {
-    const { store } = renderWithRedux(<CourseList />, {
-      courses: {
-        courses: mockCoursesData,
-      },
-    });
+  render(
+    <Provider store={store}>
+      <CourseList />
+    </Provider>
+  );
 
-    expect(store.getState().courses.courses).toHaveLength(3);
+  expect(screen.getByText('ES6')).toBeInTheDocument();
+  expect(screen.getByText('Webpack')).toBeInTheDocument();
+  expect(screen.getByText('React')).toBeInTheDocument();
+});
 
-    act(() => {
-      store.dispatch(logout());
-    });
-
-    expect(store.getState().courses.courses).toHaveLength(0);
+test('resets courses array when logout is dispatched', () => {
+  const store = createMockStore({
+    auth: { user: { email: 'test@test.com', password: 'pass' }, isLoggedIn: true },
+    notifications: { notifications: [], loading: false },
+    courses: {
+      courses: [
+        { id: 1, name: 'ES6', credit: 60, isSelected: false },
+        { id: 2, name: 'Webpack', credit: 20, isSelected: false },
+        { id: 3, name: 'React', credit: 40, isSelected: false },
+      ],
+    },
   });
 
-  test('Toggle a course checkbox and verify selection state updates', () => {
-    const { store } = renderWithRedux(<CourseList />, {
-      courses: {
-        courses: mockCoursesData,
-      },
-    });
+  store.dispatch(logout());
 
-    const checkboxes = screen.getAllByRole('checkbox');
-    expect(checkboxes[0]).not.toBeChecked();
+  expect(store.getState().courses.courses).toEqual([]);
+});
 
-    act(() => {
-      checkboxes[0].click();
-    });
-
-    expect(store.getState().courses.courses[0].isSelected).toBe(true);
-
-    act(() => {
-      checkboxes[0].click();
-    });
-
-    expect(store.getState().courses.courses[0].isSelected).toBe(false);
+test('sets isSelected to true when a course checkbox is checked', () => {
+  const store = createMockStore({
+    auth: { user: { email: 'test@test.com', password: 'pass' }, isLoggedIn: true },
+    notifications: { notifications: [], loading: false },
+    courses: {
+      courses: [
+        { id: 1, name: 'ES6', credit: 60, isSelected: false },
+        { id: 2, name: 'Webpack', credit: 20, isSelected: false },
+        { id: 3, name: 'React', credit: 40, isSelected: false },
+      ],
+    },
   });
+
+  render(
+    <Provider store={store}>
+      <CourseList />
+    </Provider>
+  );
+
+  const checkboxes = screen.getAllByRole('checkbox');
+  fireEvent.click(checkboxes[0]);
+
+  expect(store.getState().courses.courses[0].isSelected).toBe(true);
+});
+
+test('sets isSelected to false when a course checkbox is unchecked', () => {
+  const store = createMockStore({
+    auth: { user: { email: 'test@test.com', password: 'pass' }, isLoggedIn: true },
+    notifications: { notifications: [], loading: false },
+    courses: {
+      courses: [
+        { id: 1, name: 'ES6', credit: 60, isSelected: true },
+        { id: 2, name: 'Webpack', credit: 20, isSelected: false },
+        { id: 3, name: 'React', credit: 40, isSelected: false },
+      ],
+    },
+  });
+
+  render(
+    <Provider store={store}>
+      <CourseList />
+    </Provider>
+  );
+
+  const checkboxes = screen.getAllByRole('checkbox');
+  fireEvent.click(checkboxes[0]);
+
+  expect(store.getState().courses.courses[0].isSelected).toBe(false);
 });

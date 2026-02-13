@@ -1,87 +1,80 @@
-import notificationsReducer, { fetchNotifications, markNotificationAsRead, showDrawer, hideDrawer } from '../notifications/notificationsSlice';
+import notificationsReducer, {
+  markNotificationAsRead,
+  fetchNotifications,
+} from '../notifications/notificationsSlice';
 import mockAxios from 'jest-mock-axios';
+
+afterEach(() => {
+  mockAxios.reset();
+});
 
 describe('notificationsSlice', () => {
   const initialState = {
     notifications: [],
-    displayDrawer: true,
+    loading: false,
   };
 
-  afterEach(() => {
-    mockAxios.reset();
-  });
-
   describe('initialState', () => {
-    it('should return the correct initial state', () => {
+    it('should return the correct initial state by default', () => {
       expect(notificationsReducer(undefined, { type: 'unknown' })).toEqual(initialState);
     });
   });
 
   describe('fetchNotifications', () => {
-    it('should fetch notifications data correctly', async () => {
-      const mockNotifications = [
+    it('should set loading to true when fetchNotifications is pending', () => {
+      const action = { type: fetchNotifications.pending.type };
+      const newState = notificationsReducer(initialState, action);
+      expect(newState.loading).toBe(true);
+    });
+
+    it('should fetch notifications data correctly and set loading to false', () => {
+      const notifications = [
         { id: 1, type: 'default', value: 'New course available' },
         { id: 2, type: 'urgent', value: 'New resume available' },
-        { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong>' } }
+        { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } },
       ];
 
-      const action = fetchNotifications.fulfilled(mockNotifications, 'notifications/fetchNotifications');
-      const newState = notificationsReducer(initialState, action);
+      const action = {
+        type: fetchNotifications.fulfilled.type,
+        payload: notifications,
+      };
 
-      expect(newState.notifications).toEqual(mockNotifications);
+      const loadingState = { ...initialState, loading: true };
+      const newState = notificationsReducer(loadingState, action);
+
+      expect(newState.notifications).toEqual(notifications);
+      expect(newState.notifications).toHaveLength(3);
+      expect(newState.loading).toBe(false);
+    });
+
+    it('should set loading to false when fetchNotifications is rejected', () => {
+      const action = { type: fetchNotifications.rejected.type };
+      const loadingState = { ...initialState, loading: true };
+      const newState = notificationsReducer(loadingState, action);
+      expect(newState.loading).toBe(false);
     });
   });
 
   describe('markNotificationAsRead', () => {
-    it('should remove a notification correctly when the markNotificationAsRead action is dispatched', () => {
+    it('should remove a notification correctly when markNotificationAsRead is dispatched', () => {
+      const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
       const stateWithNotifications = {
         notifications: [
           { id: 1, type: 'default', value: 'New course available' },
           { id: 2, type: 'urgent', value: 'New resume available' },
-          { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong>' } }
+          { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } },
         ],
-        displayDrawer: true,
+        loading: false,
       };
 
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-      const action = markNotificationAsRead(2);
-      const newState = notificationsReducer(stateWithNotifications, action);
+      const newState = notificationsReducer(stateWithNotifications, markNotificationAsRead(2));
 
       expect(newState.notifications).toHaveLength(2);
-      expect(newState.notifications.find(n => n.id === 2)).toBeUndefined();
+      expect(newState.notifications.find((n) => n.id === 2)).toBeUndefined();
       expect(consoleSpy).toHaveBeenCalledWith('Notification 2 has been marked as read');
-      
+
       consoleSpy.mockRestore();
     });
   });
-
-  describe('showDrawer', () => {
-    it('should set displayDrawer to true when showDrawer action is dispatched', () => {
-      const stateWithDrawerHidden = {
-        notifications: [],
-        displayDrawer: false,
-      };
-
-      const action = showDrawer();
-      const newState = notificationsReducer(stateWithDrawerHidden, action);
-
-      expect(newState.displayDrawer).toBe(true);
-    });
-  });
-
-  describe('hideDrawer', () => {
-    it('should set displayDrawer to false when hideDrawer action is dispatched', () => {
-      const stateWithDrawerShown = {
-        notifications: [],
-        displayDrawer: true,
-      };
-
-      const action = hideDrawer();
-      const newState = notificationsReducer(stateWithDrawerShown, action);
-
-      expect(newState.displayDrawer).toBe(false);
-    });
-  });
 });
-
-

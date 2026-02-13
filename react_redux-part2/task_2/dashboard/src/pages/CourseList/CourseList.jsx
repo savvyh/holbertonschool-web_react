@@ -1,5 +1,5 @@
-import { StyleSheet, css } from 'aphrodite';
 import { useSelector, useDispatch } from 'react-redux';
+import { StyleSheet, css } from 'aphrodite';
 import CourseListRow from './CourseListRow/CourseListRow';
 import WithLogging from '../../components/HOC/WithLogging';
 import { selectCourse, unSelectCourse } from '../../features/courses/coursesSlice';
@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
 });
 
 function CourseList() {
+  const { courses } = useSelector((state) => state.courses);
   const dispatch = useDispatch();
-  const courses = useSelector((state) => state.courses.courses);
 
   const onChangeRow = (id, checked) => {
     if (checked) {
@@ -59,11 +59,11 @@ function CourseList() {
               {
                 courses.map(course => (
                   <CourseListRow 
-                    key={course.id} 
-                    textFirstCell={course.name} 
-                    textSecondCell={course.credit} 
+                    key={course.id}
                     id={course.id}
-                    checked={course.isSelected}
+                    textFirstCell={course.name} 
+                    textSecondCell={course.credit}
+                    isChecked={course.isSelected}
                     changeRow={onChangeRow}
                   />
                 ))
@@ -86,4 +86,4 @@ function CourseList() {
 }
 
 const CourseListWithLogging = WithLogging(CourseList);
-export default CourseListWithLogging
+export default CourseListWithLogging;

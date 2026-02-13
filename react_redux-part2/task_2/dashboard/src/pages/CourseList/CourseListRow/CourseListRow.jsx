@@ -6,6 +6,9 @@ const styles = StyleSheet.create({
   },
   row: {
     backgroundColor: '#f5f5f5ab'
+  },
+  rowChecked: {
+    backgroundColor: '#e6e4e4'
   }
 });
 
@@ -13,34 +16,32 @@ export default function CourseListRow({
   isHeader = false,
   textFirstCell = '',
   textSecondCell = null,
-  id = null,
-  checked = false,
-  changeRow = null,
+  isChecked = false,
+  id,
+  changeRow = () => {}
 }) {
-  const rowStyle = isHeader ? styles.headerRow : styles.row;
-
-  return (
-    isHeader ? (
-      <tr className={css(rowStyle)}>
+  if (isHeader) {
+    return (
+      <tr className={css(styles.headerRow)}>
         <th colSpan={textSecondCell ? 1 : 2}>{textFirstCell}</th>
         {textSecondCell ? <th>{textSecondCell}</th> : null}
       </tr>
-    ) : (
-      <tr className={css(rowStyle)}>
-        <td>
-          <input
-            type="checkbox"
-            checked={checked}
-            onChange={(event) => {
-              if (changeRow) {
-                changeRow(id, event.target.checked);
-              }
-            }}
-          />
-          {textFirstCell}
-        </td>
-        <td>{textSecondCell}</td>
-      </tr>
-    )
-  )
+    );
+  }
+
+  const rowStyle = isChecked ? styles.rowChecked : styles.row;
+
+  return (
+    <tr className={css(rowStyle)}>
+      <td>
+        <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={(e) => changeRow(id, e.target.checked)}
+        />
+        {textFirstCell}
+      </td>
+      <td>{textSecondCell}</td>
+    </tr>
+  );
 }
