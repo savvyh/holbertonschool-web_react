@@ -1,7 +1,8 @@
 import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import Notifications from "./Notifications";
+import { css } from "aphrodite";
+import Notifications, { styles } from "./Notifications";
 import notificationsReducer from "../../features/notifications/notificationsSlice";
 import { fetchNotifications } from "../../features/notifications/notificationsSlice";
 import mockAxios from 'jest-mock-axios';
@@ -18,7 +19,6 @@ const renderWithRedux = (component, initialState = {}) => {
     preloadedState: {
       notifications: {
         notifications: [],
-        displayDrawer: true,
         ...initialState.notifications,
       },
     },
@@ -50,34 +50,24 @@ describe("Notifications", () => {
     });
   });
 
-  test('Simulate closing the drawer and verify that the displayDrawer state is set to false', () => {
-    const { store } = renderWithRedux(<Notifications />, {
+  test('Simulate toggling the drawer and verify the visible style is added and removed', () => {
+    renderWithRedux(<Notifications />, {
       notifications: {
         notifications: mockNotificationsData,
-        displayDrawer: true,
       },
     });
 
     const closeButton = screen.getByRole('button', { name: /close/i });
-    fireEvent.click(closeButton);
-
-    const state = store.getState();
-    expect(state.notifications.displayDrawer).toBe(false);
-  });
-
-  test('Simulate opening the drawer and verify that the displayDrawer state is set to true', () => {
-    const { store } = renderWithRedux(<Notifications />, {
-      notifications: {
-        notifications: mockNotificationsData,
-        displayDrawer: false,
-      },
-    });
-
     const notificationTitle = screen.getByText('Your notifications');
-    fireEvent.click(notificationTitle);
+    const drawerElement = closeButton.closest('div');
 
-    const state = store.getState();
-    expect(state.notifications.displayDrawer).toBe(true);
+    expect(drawerElement.classList.contains(css(styles.visible))).toBe(false);
+
+    fireEvent.click(notificationTitle);
+    expect(drawerElement.classList.contains(css(styles.visible))).toBe(true);
+
+    fireEvent.click(closeButton);
+    expect(drawerElement.classList.contains(css(styles.visible))).toBe(false);
   });
 
   test('Simulate marking a notification as read and verify that it is removed from the list', () => {
@@ -85,7 +75,6 @@ describe("Notifications", () => {
     const { store } = renderWithRedux(<Notifications />, {
       notifications: {
         notifications: mockNotificationsData,
-        displayDrawer: true,
       },
     });
 
