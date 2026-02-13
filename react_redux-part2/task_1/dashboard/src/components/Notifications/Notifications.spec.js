@@ -70,6 +70,18 @@ describe("Notifications", () => {
     expect(drawerElement.classList.contains(css(styles.visible))).toBe(false);
   });
 
+  test('Displays a loading indicator while notifications are being fetched', () => {
+    renderWithRedux(<Notifications />, {
+      notifications: {
+        notifications: mockNotificationsData,
+        loading: true,
+      },
+    });
+
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.queryByText('Here is the list of notifications')).not.toBeInTheDocument();
+  });
+
   test('Simulate marking a notification as read and verify that it is removed from the list', () => {
     const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
     const { store } = renderWithRedux(<Notifications />, {
