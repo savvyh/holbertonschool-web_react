@@ -29,7 +29,6 @@ const renderWithRedux = (component, initialState = {}) => {
       },
       notifications: {
         notifications: [],
-        displayDrawer: true,
         ...initialState.notifications,
       },
       courses: {

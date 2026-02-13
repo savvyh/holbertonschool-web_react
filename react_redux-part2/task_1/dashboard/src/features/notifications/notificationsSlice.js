@@ -26,16 +26,14 @@ const notificationsSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchNotifications.fulfilled, (state, action) => {
-      state.notifications = action.payload;
-    });
-      builder.addCase(fetchNotifications.pending, (state) => {
+    builder.addCase(fetchNotifications.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(fetchNotifications.rejected, (state) => {
       state.loading = false;
     });
-     builder.addCase(fetchNotifications.fulfilled, (state) => {
+    builder.addCase(fetchNotifications.fulfilled, (state, action) => {
+      state.notifications = action.payload;
       state.loading = false;
     });
   },
