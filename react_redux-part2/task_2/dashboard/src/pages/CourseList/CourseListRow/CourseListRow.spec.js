@@ -34,16 +34,25 @@ describe('CourseListRow', () => {
     render(
       <table>
         <tbody>
-          <CourseListRow isHeader={false} textFirstCell="Data1" textSecondCell="Data2" />
+          <CourseListRow
+            isHeader={false}
+            textFirstCell="Data1"
+            textSecondCell="Data2"
+            id={1}
+            checked={false}
+            changeRow={() => {}}
+          />
         </tbody>
       </table>
     );
 
     const trElement = screen.getByRole('row');
     const tdElements = within(trElement).getAllByRole('cell');
+    const checkbox = within(trElement).getByRole('checkbox');
 
     expect(trElement).toBeInTheDocument();
     expect(tdElements).toHaveLength(2);
+    expect(checkbox).not.toBeChecked();
     expect(tdElements[0]).toHaveTextContent('Data1');
     expect(tdElements[1]).toHaveTextContent('Data2');
   });
