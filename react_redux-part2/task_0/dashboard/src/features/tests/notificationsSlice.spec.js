@@ -1,10 +1,10 @@
-import notificationsReducer, { fetchNotifications, markNotificationAsRead, showDrawer, hideDrawer } from '../notifications/notificationsSlice';
+import notificationsReducer, { fetchNotifications, markNotificationAsRead } from '../notifications/notificationsSlice';
 import mockAxios from 'jest-mock-axios';
 
 describe('notificationsSlice', () => {
   const initialState = {
     notifications: [],
-    displayDrawer: true,
+    loading: false,
   };
 
   afterEach(() => {
@@ -40,7 +40,7 @@ describe('notificationsSlice', () => {
           { id: 2, type: 'urgent', value: 'New resume available' },
           { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong>' } }
         ],
-        displayDrawer: true,
+        loading: false,
       };
 
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
@@ -54,34 +54,4 @@ describe('notificationsSlice', () => {
       consoleSpy.mockRestore();
     });
   });
-
-  describe('showDrawer', () => {
-    it('should set displayDrawer to true when showDrawer action is dispatched', () => {
-      const stateWithDrawerHidden = {
-        notifications: [],
-        displayDrawer: false,
-      };
-
-      const action = showDrawer();
-      const newState = notificationsReducer(stateWithDrawerHidden, action);
-
-      expect(newState.displayDrawer).toBe(true);
-    });
-  });
-
-  describe('hideDrawer', () => {
-    it('should set displayDrawer to false when hideDrawer action is dispatched', () => {
-      const stateWithDrawerShown = {
-        notifications: [],
-        displayDrawer: true,
-      };
-
-      const action = hideDrawer();
-      const newState = notificationsReducer(stateWithDrawerShown, action);
-
-      expect(newState.displayDrawer).toBe(false);
-    });
-  });
 });
-
-
