@@ -96,6 +96,7 @@ export const styles = StyleSheet.create({
 const Notifications = memo(function Notifications() {
   const dispatch = useDispatch();
   const notifications = useSelector((state) => state.notifications.notifications);
+  const loading = useSelector((state) => state.notifications.loading);
   const DrawerRef = useRef(null);
 
   const handleMarkNotificationAsRead = (id) => {
@@ -124,7 +125,9 @@ const Notifications = memo(function Notifications() {
         Your notifications
       </div>
       <div ref={DrawerRef} className={css(styles.notificationItems)}>
-        {notifications.length > 0 ? (
+        {loading ? (
+          <p className={css(styles.p)}>Loading...</p>
+        ) : notifications.length > 0 ? (
           <>
             <p className={css(styles.p)}>Here is the list of notifications</p>
             <button
